@@ -1,0 +1,58 @@
+{
+  "cabecera": {
+    "marca": "Diagnóstico · 8 preguntas · 4 áreas",
+    "tituloAntes": "¿En qué punto está tu empresa con la",
+    "tituloDestacado": "inteligencia artificial",
+    "tituloDespues": "?",
+    "entradilla": "Ocho preguntas sobre datos, personas, procesos y herramientas. Al momento tienes tu nivel, el área que más frena y por dónde empezar.",
+    "avisoAntes": "Ahora ves unas respuestas de ejemplo. Cámbialas por las tuyas o",
+    "avisoBoton": "empieza en blanco",
+    "avisoDespues": "."
+  },
+  "informe": {
+    "contestadas": "{contestadas} de {total} contestadas",
+    "informe": "Informe",
+    "tuNivel": "Tu nivel",
+    "sinDatos": "Sin datos",
+    "sinDatosTexto": "Contesta al menos una pregunta de cada área para ver tu nivel.",
+    "media": "{texto} Media: {media} sobre 4.",
+    "radar": "Puntuación por área",
+    "empezar": "Por dónde empezar: {area}",
+    "empezarSinDatos": "Por dónde empezar",
+    "empezarSinDatosTexto": "Contesta las preguntas y aquí verás el área que más frena.",
+    "faltan": "Faltan {faltan} respuestas",
+    "enviar": "Enviar mis respuestas"
+  },
+  "envio": {
+    "empresa": "Nombre de tu empresa (opcional)",
+    "correo": "Tu correo (opcional)",
+    "permiso": "Acepto que me escribáis a este correo para hablar del resultado",
+    "enviando": "Enviando…",
+    "enviado": "Recibido. Gracias: solo lo ve nuestro equipo, y te escribiremos si nos has dejado tu correo.",
+    "errorPermiso": "Si nos dejas tu correo, marca la casilla para que podamos escribirte.",
+    "errorCorreo": "Ese correo no parece válido.",
+    "errorEnvio": "No se ha podido enviar. Inténtalo de nuevo en un momento.",
+    "sinConfigurar": "En esta copia de la web el envío no está configurado: tus respuestas no se guardan en ningún sitio."
+  },
+  "panel": {
+    "titulo": "Panel del equipo",
+    "entrar": "Entra con tu usuario del equipo para ver los diagnósticos recibidos.",
+    "correo": "Correo",
+    "contrasena": "Contraseña",
+    "botonEntrar": "Entrar",
+    "entrando": "Entrando…",
+    "errorEntrar": "No se ha podido entrar. Revisa el correo y la contraseña.",
+    "sinPermiso": "Tu usuario no tiene acceso al panel. Pide a quien administra el proyecto que te dé de alta en el equipo.",
+    "salir": "Cerrar sesión",
+    "volver": "Volver al diagnóstico",
+    "recibidos": "diagnósticos recibidos",
+    "media": "media sobre 4",
+    "conCorreo": "con correo para contactar",
+    "vacio": "Todavía no ha llegado ningún diagnóstico.",
+    "columnas": { "fecha": "Fecha", "empresa": "Empresa", "correo": "Correo", "media": "Media", "nivel": "Nivel" },
+    "sinDato": "—",
+    "errorCargar": "No se han podido cargar los diagnósticos.",
+    "sinConfigurar": "El panel no está configurado en esta copia de la web: faltan las variables de Supabase del fichero .env (mira .env.example)."
+  },
+  "pie": "Ejemplo del curso «Del artefacto a la web con Claude Code». Las preguntas y los niveles son de ejemplo. Las respuestas que envías se guardan en Supabase y solo las ve el equipo."
+}

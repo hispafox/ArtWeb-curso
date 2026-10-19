@@ -1,0 +1,33 @@
+{
+  "areas": [
+    { "id": "datos", "nombre": "Datos", "consejo": "Reúne en un solo sitio los documentos que más se consultan y pon a alguien al cargo de que estén al día." },
+    { "id": "personas", "nombre": "Personas", "consejo": "Elige una persona de referencia y reserva una hora al mes para que el equipo comparta lo que le funciona." },
+    { "id": "procesos", "nombre": "Procesos", "consejo": "Apunta cinco tareas que se repiten cada semana y mide cuánto tiempo se llevan hoy." },
+    { "id": "herramientas", "nombre": "Herramientas", "consejo": "Pasa a una cuenta de empresa y deja escrito qué datos no se meten nunca en una IA." }
+  ],
+  "preguntas": [
+    { "id": "p1", "area": "datos", "texto": "¿Dónde están los datos con los que decide tu equipo?",
+      "opciones": ["En la cabeza de cada uno y en correos", "En hojas de cálculo sueltas", "En un sistema común, aunque no siempre al día", "En un sistema común, limpio y con responsable"] },
+    { "id": "p2", "area": "datos", "texto": "Si mañana conectaras una IA a los documentos de tu empresa, ¿estarían listos?",
+      "opciones": ["No sabríamos por dónde empezar", "Habría que buscarlos y ordenarlos", "Casi todos están en un mismo sitio", "Sí, ordenados y con permisos claros"] },
+    { "id": "p3", "area": "personas", "texto": "¿Cuánta gente del equipo usa la IA cada semana?",
+      "opciones": ["Nadie o casi nadie", "Dos o tres personas curiosas", "Más o menos la mitad", "Casi todo el mundo"] },
+    { "id": "p4", "area": "personas", "texto": "¿Hay alguien que enseñe y resuelva dudas?",
+      "opciones": ["No", "Quien sabe ayuda cuando puede", "Hay una persona de referencia", "Hay formación y un canal para dudas"] },
+    { "id": "p5", "area": "procesos", "texto": "¿Tienes localizadas tareas que la IA podría hacer o acelerar?",
+      "opciones": ["Todavía no", "Hay ideas sueltas", "Hay una lista con prioridades", "Ya hay tareas medidas y en marcha"] },
+    { "id": "p6", "area": "procesos", "texto": "Cuando la IA se equivoca, ¿quién lo revisa?",
+      "opciones": ["Nadie lo ha pensado", "Quien la usa, si se da cuenta", "Se revisa lo importante", "Se revisa y se aprende de cada fallo"] },
+    { "id": "p7", "area": "herramientas", "texto": "¿Qué herramientas de IA se usan en tu empresa?",
+      "opciones": ["Las gratuitas, cada uno la suya", "Alguna de pago, sin acuerdo de empresa", "Una cuenta de empresa para parte del equipo", "Cuentas de empresa para todos, con administración"] },
+    { "id": "p8", "area": "herramientas", "texto": "¿Hay normas sobre qué datos se pueden meter en una IA?",
+      "opciones": ["No", "Se habla, pero no está escrito", "Hay unas normas escritas", "Hay normas, se conocen y se revisan"] }
+  ],
+  "niveles": [
+    { "hasta": 1.75, "nombre": "Explorando", "texto": "La IA entra por iniciativa de cada persona. Lo primero es poner un poco de orden antes de comprar nada." },
+    { "hasta": 2.5, "nombre": "Probando", "texto": "Hay uso y ganas, pero cada uno a su manera. Toca elegir dos o tres tareas y hacerlas bien." },
+    { "hasta": 3.25, "nombre": "Integrando", "texto": "La IA ya forma parte del trabajo de varias áreas. Ahora se trata de medirla y de cuidar los datos." },
+    { "hasta": 4.01, "nombre": "Transformando", "texto": "La IA está en los procesos y tiene normas. El siguiente paso es llevarla a lo que ven tus clientes." }
+  ],
+  "ejemplo": { "p1": 2, "p2": 2, "p3": 3, "p4": 2, "p5": 1, "p6": 2, "p7": 2, "p8": 1 }
+}
