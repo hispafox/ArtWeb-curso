@@ -50,7 +50,7 @@ Con la **calculadora de ahorro**, en tu repositorio `gestoria-calculadora-ahorro
 
 3. **La mejora, en su vista previa.** Resuelve el issue que apuntaste en el módulo 3:
 
-   > Resuelve el issue de la versión al pie en una rama y abre la pull request. Dame la dirección de la vista previa de esa rama.
+   > Resuelve el issue de la versión al pie en una rama y abre la pull request, que diga que cierra ese issue. Dame la dirección de la vista previa de esa rama.
 
    Abre la vista previa y comprueba que la versión aparece al pie. Abre también la dirección de producción: ahí todavía no está.
 
@@ -76,5 +76,6 @@ Si tu empresa tiene un dominio, pídele a Claude que te guíe para ponérselo, c
 - [ ] La web se abre en una **dirección estable** y funciona igual que en tu equipo.
 - [ ] La rama de la mejora tuvo su **vista previa**, con la versión al pie, mientras producción seguía sin ella.
 - [ ] Al aceptar la pull request, **producción se actualizó sola**, en la misma dirección.
+- [ ] Al aceptar la pull request, el **issue** de la versión al pie se ha cerrado solo.
 - [ ] Sabes quién puede abrir la web ahora y qué harías para que solo la viera el cliente.
 - [ ] Sabes cómo se vuelve a la publicación anterior y por qué después hay que pulsar «Undo Rollback».
