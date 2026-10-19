@@ -1,0 +1,75 @@
+{
+  "fecha": "2026-10-19",
+  "diasValidez": 30,
+  "inicioPorDefecto": "2026-11-02",
+  "planInicial": "implantacion",
+  "fases": ["Descubrimiento", "Diseño de respuestas", "Construcción", "Pruebas con usuarios", "Formación y arranque"],
+  "alcance": [
+    { "id": "web", "texto": "Asistente en la web" },
+    { "id": "correo", "texto": "Respuestas por correo" },
+    { "id": "whatsapp", "texto": "Canal de WhatsApp" },
+    { "id": "faq", "texto": "Las 50 preguntas más frecuentes" },
+    { "id": "base", "texto": "Base de conocimiento completa" },
+    { "id": "crm", "texto": "Conexión con tu CRM" },
+    { "id": "panel", "texto": "Panel con lo que pregunta la gente" },
+    { "id": "informe", "texto": "Informe de resultados al terminar" },
+    { "id": "soporte", "texto": "Tres meses de soporte tras el arranque" }
+  ],
+  "planes": [
+    {
+      "id": "piloto",
+      "nombre": "Piloto",
+      "lema": "Para probarlo en un canal y ver resultados antes de decidir.",
+      "semanasPorFase": [1, 1, 2, 1, 1],
+      "precio": 9800,
+      "formacion": 4,
+      "equipo": 2,
+      "incluye": ["web", "faq", "informe"]
+    },
+    {
+      "id": "implantacion",
+      "nombre": "Implantación",
+      "lema": "El asistente en marcha en la web y el correo, conectado a tu CRM.",
+      "semanasPorFase": [2, 2, 3, 2, 1],
+      "precio": 24500,
+      "formacion": 8,
+      "equipo": 3,
+      "incluye": ["web", "correo", "faq", "base", "crm", "panel", "informe"]
+    },
+    {
+      "id": "escala",
+      "nombre": "Escala",
+      "lema": "Todos los canales, el equipo entero formado y tres meses de soporte.",
+      "semanasPorFase": [2, 3, 4, 3, 2],
+      "precio": 41000,
+      "formacion": 16,
+      "equipo": 4,
+      "incluye": ["web", "correo", "whatsapp", "faq", "base", "crm", "panel", "informe", "soporte"]
+    }
+  ],
+  "extras": [
+    {
+      "id": "ingles",
+      "titulo": "Un segundo idioma: inglés",
+      "detalle": "El asistente contesta también en inglés. Alarga dos semanas la construcción.",
+      "precio": 3200,
+      "semanas": { "fase": 2, "mas": 2 }
+    },
+    {
+      "id": "supervisores",
+      "titulo": "Formación extra para supervisores",
+      "detalle": "Ocho horas más para quien revisa las respuestas y mejora la base de conocimiento.",
+      "precio": 2400,
+      "formacion": 8,
+      "semanas": { "fase": 4, "mas": 1 }
+    },
+    {
+      "id": "soporte",
+      "titulo": "Tres meses de soporte tras el arranque",
+      "detalle": "Revisamos cada semana las preguntas sin respuesta y ajustamos el asistente.",
+      "precio": 3600,
+      "acompanamiento": 12,
+      "incluidoEn": ["escala"]
+    }
+  ]
+}

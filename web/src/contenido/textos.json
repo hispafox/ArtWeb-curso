@@ -1,0 +1,61 @@
+{
+  "cabecera": {
+    "referencia": "PROPUESTA PRO-2026-041",
+    "validez": "Válida hasta el {fecha}",
+    "tituloAntes": "Un asistente de IA para tu",
+    "tituloDestacado": "atención al cliente",
+    "entradilla": "Tu equipo contesta cada día las mismas preguntas por la web y por correo. Te proponemos un asistente que responde las habituales a cualquier hora y pasa a una persona lo que no sabe resolver. Elige hasta dónde quieres llegar: al momento verás qué incluye, cuánto dura y cuánto cuesta."
+  },
+  "planes": {
+    "paso": "Paso 1",
+    "titulo": "Elige el plan",
+    "elegido": "Elegido",
+    "semanas": "{semanas} semanas"
+  },
+  "ajustes": {
+    "paso": "Paso 2",
+    "titulo": "Ajusta los detalles",
+    "inicio": "¿Cuándo empezamos?",
+    "incluido": "Incluido",
+    "masPrecio": "+ {precio}"
+  },
+  "incluye": {
+    "paso": "Paso 3",
+    "titulo": "Qué incluye",
+    "si": "incluido",
+    "no": "no incluido"
+  },
+  "calendario": {
+    "paso": "Paso 4",
+    "titulo": "El calendario",
+    "semanasCorto": "{semanas} sem.",
+    "soporte": "Soporte",
+    "marca": "sem. {semana}",
+    "notaConSoporte": "El proyecto dura {semanas} semanas. El soporte va después de la puesta en marcha y no la retrasa.",
+    "notaSinSoporte": "El proyecto dura {semanas} semanas, de un lunes a un viernes."
+  },
+  "resumen": {
+    "titulo": "Tu elección",
+    "plan": "Plan",
+    "duracion": "Duración",
+    "arranque": "Arranque",
+    "fin": "Puesta en marcha",
+    "formacion": "Formación",
+    "equipo": "Equipo",
+    "semanas": "{semanas} semanas",
+    "horas": "{horas} horas",
+    "personas": "{personas} personas",
+    "inversion": "Inversión",
+    "iva": "IVA no incluido",
+    "aceptar": "Aceptar este plan",
+    "aceptado": "Has elegido el plan {plan}, con arranque el {inicio}. En una propuesta real, este botón enviaría tu aceptación; en este ejemplo no se guarda ni se envía nada."
+  },
+  "contacto": {
+    "paso": "¿Hablamos?",
+    "titulo": "Cuéntanos qué te parece",
+    "intro": "Déjanos tus datos y te llamamos para resolver dudas y cerrar la fecha de arranque.",
+    "pendiente": "Mientras tanto, escríbenos a",
+    "correo": "propuestas@example.com"
+  },
+  "pie": "Ejemplo del curso «Del artefacto a la web con Claude Code». La empresa, los planes y las cifras son inventados."
+}
