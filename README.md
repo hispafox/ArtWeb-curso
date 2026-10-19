@@ -8,7 +8,9 @@ No hace falta saber programar para usarlo. Todo se le pide a Claude Code de escr
 
 ## Los cinco artefactos
 
-Están en la carpeta `artefactos/`, tal como salen de Claude. Se hicieron como artefactos en claude.ai y se exportaron con Compartir › Exportación › HTML «Página web independiente»: cada uno es un único fichero que se abre con doble clic en cualquier navegador. Las empresas, las personas, las cifras y las fechas son de ejemplo. Cada artefacto lleva sus datos juntos al principio de su código (`PROPUESTA`, `CALCULADORA`, `DIAGNOSTICO`, `PORTAL` y `TABLERO`), y son esos datos los que pasan a ficheros aparte cuando el artefacto se convierte en web (módulo 4).
+Están en la carpeta `artefactos/`. Se hicieron como artefactos en claude.ai y se exportaron con Compartir › Exportación › HTML «Página web independiente»: cada uno es un único fichero que se abre con doble clic en cualquier navegador. Las empresas, las personas, las cifras y las fechas son de ejemplo. Cada artefacto lleva sus datos juntos al principio de su código (`PROPUESTA`, `CALCULADORA`, `DIAGNOSTICO`, `PORTAL` y `TABLERO`), y son esos datos los que pasan a ficheros aparte cuando el artefacto se convierte en web (módulo 4).
+
+**Lo exportado no siempre es una copia exacta de lo que ves en claude.ai.** Claude.ai le pone a cada artefacto su propio esqueleto de página al enseñarlo, y el fichero exportado sale sin él: empieza directamente por el título y los estilos. Por eso a los cinco se les añadió un esqueleto mínimo, sin tocar su diseño, sus textos ni su código. Y en `gestion-tareas.html` hizo falta además una línea de estilos (`[hidden] { display: none !important; }`), porque en el fichero exportado el formulario «Nueva tarea» salía abierto desde el principio y el botón no lo cerraba. La costumbre que sale de aquí: antes de trabajar con un artefacto exportado, ábrelo en el navegador y comprueba que hace lo mismo que en claude.ai.
 
 | Artefacto | Qué hace | ¿Guarda datos? | Para qué se usa en el curso |
 |---|---|---|---|
