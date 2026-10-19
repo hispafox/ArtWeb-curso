@@ -5,7 +5,8 @@ La propuesta de un asistente de IA para la atención al cliente, convertida en w
 ## Para el equipo
 
 - **Qué hace:** quien la abre elige el plan Piloto, Implantación o Escala, marca los extras que quiera (un segundo idioma, formación para supervisores, tres meses de soporte) y elige cuándo empezar. El resumen de la derecha dice el plan, la duración, las fechas, la formación, el equipo y la inversión. Al final hay una sección de contacto.
-- **Dónde se ve:** todavía sin publicar. Publicarla es el módulo 5.
+- **Dónde se ve:** en Vercel, en el proyecto enlazado a este repositorio. La dirección la da Vercel al crear el proyecto. Cada rama tiene además su vista previa.
+- **Qué versión es:** el número está al pie de la página y sale del `package.json`. Se sube con cada cambio que se publica.
 - **Cómo verla antes de publicar:** pídele a Claude «Enséñame la web de la propuesta en el navegador de la app».
 - **Cómo cambiar datos y textos:** todo está en `src/contenido/`. Los datos (planes, precios, semanas, extras, fechas), en `propuesta.json`; los textos de la página, en `textos.json`. Pídele a Claude el cambio, por ejemplo «Sube el plan Implantación a 26.000 €»: lo hace con la skill de gestión de contenido, sin tocar el diseño.
 - **El formulario de contacto:** la sección «¿Hablamos?» tiene un hueco para el formulario del CRM. Mientras está vacío, muestra el correo de contacto. Para rellenarlo, copia el código de inserción del formulario en el CRM y pídele a Claude «Mete en el hueco del formulario del CRM este código de inserción».
@@ -25,6 +26,7 @@ La propuesta de un asistente de IA para la atención al cliente, convertida en w
   - `npm run build`: comprueba los tipos y genera la versión publicable en `dist/`.
   - `npm test`: pasa las pruebas.
   - `npm run preview`: sirve en local lo que hay en `dist/`.
-- **Pruebas:** los cálculos de cada plan y de cada extra (precio, semanas, formación, soporte incluido en Escala, fechas), la coherencia de `propuesta.json` (que los planes incluyan cosas que existen, que haya semanas para cada fase, que los extras apunten a fases y planes que existen), que no haya textos vacíos, la página entera al cambiar de plan, de extras y de fecha, y el hueco del formulario.
+- **Pruebas:** el número de versión del pie, los cálculos de cada plan y de cada extra (precio, semanas, formación, soporte incluido en Escala, fechas), la coherencia de `propuesta.json` (que los planes incluyan cosas que existen, que haya semanas para cada fase, que los extras apunten a fases y planes que existen), que no haya textos vacíos, la página entera al cambiar de plan, de extras y de fecha, y el hueco del formulario.
 - **Variables de entorno:** ninguna.
-- **Publicación:** todavía sin publicar.
+- **Publicación:** Vercel, con el proyecto enlazado al repositorio de GitHub. `vercel.json` fija el preset de Vite, la instalación (`npm ci`), la compilación (`npm run build`) y la carpeta que se publica (`dist`). En el repositorio del curso la web está en la carpeta `web/`, así que el proyecto de Vercel lleva `web` como Root Directory; en un repositorio propio del artefacto, la raíz. Lo que entra en `main` se publica en producción; las demás ramas, en vistas previas.
+- **Versión al pie:** `vite.config.ts` lee la versión del `package.json` y la pasa a la web como `__VERSION__`.

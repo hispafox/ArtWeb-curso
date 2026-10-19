@@ -57,5 +57,6 @@
     "pendiente": "Mientras tanto, escríbenos a",
     "correo": "propuestas@example.com"
   },
-  "pie": "Ejemplo del curso «Del artefacto a la web con Claude Code». La empresa, los planes y las cifras son inventados."
+  "pie": "Ejemplo del curso «Del artefacto a la web con Claude Code». La empresa, los planes y las cifras son inventados.",
+  "version": "· Versión {version}"
 }

@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { propuesta, textos } from './contenido'
+import { propuesta } from './contenido'
 import { Ajustes } from './componentes/Ajustes'
 import { Cabecera } from './componentes/Cabecera'
 import { Calendario } from './componentes/Calendario'
 import { FormularioCrm } from './componentes/FormularioCrm'
 import { Incluye } from './componentes/Incluye'
+import { Pie } from './componentes/Pie'
 import { Planes } from './componentes/Planes'
 import { Resumen } from './componentes/Resumen'
 import { calcular, type Eleccion } from './logica/calculo'
@@ -47,7 +48,7 @@ export default function App() {
 
       <Resumen resultado={resultado} aceptado={aceptado} alAceptar={() => setAceptado(true)} />
 
-      <footer>{textos.pie}</footer>
+      <Pie />
     </div>
   )
 }

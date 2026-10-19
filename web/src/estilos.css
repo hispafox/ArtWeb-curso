@@ -118,3 +118,6 @@ footer { grid-column: 1 / -1; font-size: .85rem; color: var(--tinta-suave); bord
 .contacto p { margin: 0; color: var(--tinta-suave); }
 .formulario-crm { min-height: 72px; padding: 16px; border: 1.5px dashed var(--linea); border-radius: 10px; }
 .formulario-crm a { color: var(--pino); font-weight: 700; }
+
+/* El número de versión, al pie */
+footer .version { font-family: var(--f-dato); font-size: 12px; white-space: nowrap; }
