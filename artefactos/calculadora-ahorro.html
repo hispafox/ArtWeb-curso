@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de horas recuperadas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Figtree:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Maqueta: los mandos a la izquierda, el resultado grande a la derecha, como una ficha de horas; en móvil, una columna */
+:root {
+  --fondo: #eef1f6;
+  --ficha: #ffffff;
+  --tinta: #1a2238;
+  --tinta-suave: #56617a;
+  --mandarina: #f26b1d;
+  --mandarina-suave: #fde3d3;
+  --pizarra: #5b6b8c;
+  --linea: #d5dbe6;
+  --f-cifra: "Unbounded", "Segoe UI", system-ui, sans-serif;
+  --f-texto: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-dato: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #10141f; --ficha: #181e2d; --tinta: #e7ebf3; --tinta-suave: #a2abc0;
+    --mandarina: #ff8a45; --mandarina-suave: #3d2414; --pizarra: #93a3c4; --linea: #2b3347;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #10141f; --ficha: #181e2d; --tinta: #e7ebf3; --tinta-suave: #a2abc0;
+  --mandarina: #ff8a45; --mandarina-suave: #3d2414; --pizarra: #93a3c4; --linea: #2b3347;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--fondo); color: var(--tinta);
+  font-family: var(--f-texto); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 48px;
+}
+.marco { max-width: 1080px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 10px; max-width: 70ch; }
+.sello { font-family: var(--f-dato); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--mandarina); }
+h1 { font-family: var(--f-cifra); font-weight: 700; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.1; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.entradilla { margin: 0; color: var(--tinta-suave); font-size: 1.05rem; }
+.cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 24px; align-items: start; }
+.mandos { display: grid; gap: 22px; padding: 22px; background: var(--ficha); border: 1px solid var(--linea); border-radius: 14px; }
+.ejemplos { display: grid; gap: 8px; }
+.ejemplos .titulo { font-weight: 700; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: .92rem; padding: 7px 12px; border-radius: 99px; border: 1.5px solid var(--linea); background: transparent; color: var(--tinta); cursor: pointer; }
+.chip:hover { border-color: var(--pizarra); }
+.chip[aria-pressed="true"] { border-color: var(--mandarina); background: var(--mandarina-suave); }
+.chip:focus-visible { outline: 3px solid var(--pizarra); outline-offset: 2px; }
+.mando { display: grid; gap: 6px; }
+.mando .cabeza { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.mando label { font-weight: 600; }
+.mando output { font-family: var(--f-dato); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mando .ayuda { font-size: .88rem; color: var(--tinta-suave); }
+input[type="range"] { width: 100%; accent-color: var(--mandarina); }
+input[type="range"]:focus-visible { outline: 3px solid var(--pizarra); outline-offset: 4px; }
+.resultado { display: grid; gap: 18px; padding: 26px; background: var(--tinta); color: var(--fondo); border-radius: 14px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); }
+.resultado .etiqueta { font-family: var(--f-dato); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }
+.horas { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.horas .cifra { font-family: var(--f-cifra); font-weight: 700; font-size: clamp(3.4rem, 9vw, 5.6rem); line-height: .95; color: var(--mandarina); font-variant-numeric: tabular-nums; }
+.horas .unidad { font-family: var(--f-cifra); font-size: 1.1rem; }
+.frase { margin: 0; font-size: 1.05rem; max-width: 46ch; }
+.mes { display: grid; gap: 6px; }
+.barra-mes { height: 18px; border-radius: 5px; background: color-mix(in srgb, var(--fondo) 16%, transparent); overflow: hidden; }
+.barra-mes span { display: block; height: 100%; width: 0; background: var(--mandarina); transition: width .3s; }
+.mes .pie { display: flex; justify-content: space-between; font-family: var(--f-dato); font-size: 12px; opacity: .8; font-variant-numeric: tabular-nums; }
+.parejas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pareja { padding: 14px; border-radius: 10px; background: color-mix(in srgb, var(--fondo) 9%, transparent); display: grid; gap: 4px; }
+.pareja .valor { font-family: var(--f-cifra); font-weight: 500; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.pareja .que { font-size: .9rem; opacity: .8; }
+.cuenta { font-family: var(--f-dato); font-size: 12px; opacity: .7; margin: 0; overflow-wrap: anywhere; }
+footer { font-size: .85rem; color: var(--tinta-suave); border-top: 1px solid var(--linea); padding-top: 14px; }
+@media (max-width: 820px) {
+  .cuerpo { grid-template-columns: minmax(0, 1fr); }
+  .resultado { position: static; }
+}
+@media (max-width: 420px) { .parejas { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="marco">
+  <header>
+    <span class="sello">Calculadora de horas recuperadas</span>
+    <h1>¿Cuántas horas al mes te devuelve automatizar una tarea?</h1>
+    <p class="entradilla">Mueve los mandos con los datos de una tarea que tu equipo repite cada semana. A la derecha verás las horas que deja libres y lo que valen.</p>
+  </header>
+
+  <div class="cuerpo">
+    <section class="mandos" aria-label="Datos de la tarea">
+      <div class="ejemplos">
+        <span class="titulo">Empieza con un ejemplo</span>
+        <div class="chips" id="ejemplos"></div>
+      </div>
+
+      <div class="mando">
+        <div class="cabeza"><label for="veces">Veces por semana</label><output id="o-veces" for="veces"></output></div>
+        <input type="range" id="veces" min="1" max="100" step="1">
+        <span class="ayuda">Contando todas las personas que la hacen.</span>
+      </div>
+      <div class="mando">
+        <div class="cabeza"><label for="minutos">Minutos cada vez</label><output id="o-minutos" for="minutos"></output></div>
+        <input type="range" id="minutos" min="1" max="180" step="1">
+      </div>
+      <div class="mando">
+        <div class="cabeza"><label for="personas">Personas que la hacen</label><output id="o-personas" for="personas"></output></div>
+        <input type="range" id="personas" min="1" max="20" step="1">
+      </div>
+      <div class="mando">
+        <div class="cabeza"><label for="parte">Parte que se puede automatizar</label><output id="o-parte" for="parte"></output></div>
+        <input type="range" id="parte" min="10" max="100" step="5">
+        <span class="ayuda">Casi nunca es todo: alguien sigue revisando los casos raros.</span>
+      </div>
+      <div class="mando">
+        <div class="cabeza"><label for="coste">Coste de una hora de trabajo</label><output id="o-coste" for="coste"></output></div>
+        <input type="range" id="coste" min="15" max="90" step="1">
+        <span class="ayuda">Sueldo, cotizaciones y puesto, repartidos por hora.</span>
+      </div>
+    </section>
+
+    <section class="resultado" aria-live="polite" aria-label="Resultado">
+      <span class="etiqueta">Cada mes recuperas</span>
+      <div class="horas"><span class="cifra" id="r-horas"></span><span class="unidad">horas</span></div>
+      <p class="frase" id="r-frase"></p>
+      <div class="mes">
+        <span class="etiqueta" id="r-mes-titulo"></span>
+        <div class="barra-mes" aria-hidden="true"><span id="r-barra"></span></div>
+        <div class="pie"><span id="r-porcentaje"></span><span id="r-total-mes"></span></div>
+      </div>
+      <div class="parejas">
+        <div class="pareja"><span class="valor" id="r-jornadas"></span><span class="que">jornadas de 8 horas al año</span></div>
+        <div class="pareja"><span class="valor" id="r-euros"></span><span class="que">al año en tiempo de trabajo</span></div>
+      </div>
+      <p class="cuenta" id="r-cuenta"></p>
+    </section>
+  </div>
+
+  <footer>Ejemplo del curso «Del artefacto a la web con Claude Code». Las tareas y las cifras son de ejemplo, y el cálculo no guarda nada.</footer>
+</div>
+
+<script>
+// Datos de la calculadora: los ejemplos y las constantes, aparte del diseño.
+const CALCULADORA = {
+  semanasAlAnio: 52,
+  horasMesPorPersona: 160,
+  horasJornada: 8,
+  ejemplos: [
+    { id: "facturas", nombre: "Pasar facturas al ERP", veces: 40, minutos: 6, personas: 2, parte: 80, coste: 28 },
+    { id: "correos", nombre: "Responder correos de seguimiento", veces: 60, minutos: 4, personas: 3, parte: 60, coste: 26 },
+    { id: "informe", nombre: "Preparar el informe semanal", veces: 1, minutos: 150, personas: 1, parte: 70, coste: 42 }
+  ],
+  inicial: "facturas"
+};
+
+const $ = (id) => document.getElementById(id);
+const num = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 });
+const eur = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+const mandos = ["veces", "minutos", "personas", "parte", "coste"];
+
+function calcular(d) {
+  const minutosSemana = d.veces * d.minutos * (d.parte / 100);
+  const horasMes = (minutosSemana * CALCULADORA.semanasAlAnio) / 12 / 60;
+  const horasEquipo = d.personas * CALCULADORA.horasMesPorPersona;
+  return {
+    horasMes,
+    horasEquipo,
+    porcentaje: Math.min(100, (horasMes / horasEquipo) * 100),
+    jornadasAnio: (horasMes * 12) / CALCULADORA.horasJornada,
+    eurosAnio: horasMes * 12 * d.coste
+  };
+}
+
+function leer() {
+  return Object.fromEntries(mandos.map((m) => [m, Number($(m).value)]));
+}
+
+function pintar() {
+  const d = leer();
+  $("o-veces").textContent = `${d.veces} veces`;
+  $("o-minutos").textContent = `${d.minutos} min`;
+  $("o-personas").textContent = d.personas === 1 ? "1 persona" : `${d.personas} personas`;
+  $("o-parte").textContent = `${d.parte} %`;
+  $("o-coste").textContent = `${eur.format(d.coste)}/h`;
+
+  const r = calcular(d);
+  $("r-horas").textContent = num.format(r.horasMes);
+  const jornadasMes = r.horasMes / CALCULADORA.horasJornada;
+  $("r-frase").textContent = jornadasMes >= 1
+    ? `Es como tener ${num.format(jornadasMes)} jornadas libres al mes para lo que hoy no da tiempo a hacer.`
+    : `Menos de una jornada al mes: quizá no sea la primera tarea por la que empezar.`;
+  $("r-mes-titulo").textContent = d.personas === 1 ? "Tu mes de trabajo" : `El mes de trabajo de ${d.personas} personas`;
+  $("r-barra").style.width = `${r.porcentaje}%`;
+  $("r-porcentaje").textContent = `${num.format(r.porcentaje)} % libre`;
+  $("r-total-mes").textContent = `${r.horasEquipo} h`;
+  $("r-jornadas").textContent = num.format(r.jornadasAnio);
+  $("r-euros").textContent = eur.format(r.eurosAnio);
+  $("r-cuenta").textContent = `${d.veces} × ${d.minutos} min × ${d.parte} % × 52 semanas ÷ 12 meses = ${num.format(r.horasMes)} h al mes`;
+}
+
+function aplicar(id) {
+  const e = CALCULADORA.ejemplos.find((x) => x.id === id);
+  for (const m of mandos) $(m).value = e[m];
+  for (const b of document.querySelectorAll(".chip")) b.setAttribute("aria-pressed", String(b.dataset.id === id));
+  pintar();
+}
+
+$("ejemplos").innerHTML = CALCULADORA.ejemplos
+  .map((e) => `<button type="button" class="chip" id="ej-${e.id}" data-id="${e.id}" aria-pressed="false">${e.nombre}</button>`)
+  .join("");
+$("ejemplos").addEventListener("click", (ev) => { const b = ev.target.closest(".chip"); if (b) aplicar(b.dataset.id); });
+for (const m of mandos) $(m).addEventListener("input", () => {
+  for (const b of document.querySelectorAll(".chip")) b.setAttribute("aria-pressed", "false");
+  pintar();
+});
+aplicar(CALCULADORA.inicial);
+</script>
+</body>
+</html>

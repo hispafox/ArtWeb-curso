@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablero de tareas del equipo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Nunito+Sans:wght@400;600;700&family=Spline+Sans+Mono:wght@400;600&display=swap">
+<style>
+/* Maqueta: barra de herramientas arriba (ver como, nueva tarea) y tres columnas de tablero; en móvil, las columnas una debajo de otra */
+:root {
+  --fondo: #eceef2;
+  --columna: #e2e5eb;
+  --tarjeta: #ffffff;
+  --tinta: #22252b;
+  --tinta-suave: #5f6573;
+  --frambuesa: #c2185b;
+  --frambuesa-suave: #f8dce7;
+  --linea: #d3d7df;
+  --web: #2563c9;
+  --contenido: #8a5a00;
+  --cliente: #127a5f;
+  --retraso: #c2410c;
+  --f-titulo: "Sora", "Segoe UI", system-ui, sans-serif;
+  --f-texto: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  --f-dato: "Spline Sans Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #15171c; --columna: #1d2027; --tarjeta: #262a33; --tinta: #eceef3; --tinta-suave: #a7adbb;
+    --frambuesa: #ff5c97; --frambuesa-suave: #3d1726; --linea: #343946;
+    --web: #7aa7ff; --contenido: #f0b54a; --cliente: #4fd1a8; --retraso: #ff8a4c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #15171c; --columna: #1d2027; --tarjeta: #262a33; --tinta: #eceef3; --tinta-suave: #a7adbb;
+  --frambuesa: #ff5c97; --frambuesa-suave: #3d1726; --linea: #343946;
+  --web: #7aa7ff; --contenido: #f0b54a; --cliente: #4fd1a8; --retraso: #ff8a4c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--fondo); color: var(--tinta);
+  font-family: var(--f-texto); font-size: 16px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 40px;
+}
+.marco { max-width: 1180px; margin: 0 auto; display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+h1 { font-family: var(--f-titulo); font-weight: 800; font-size: clamp(1.7rem, 3.6vw, 2.4rem); margin: 0; line-height: 1.1; letter-spacing: -.02em; }
+.hoy { font-family: var(--f-dato); font-size: 13px; color: var(--tinta-suave); }
+.herramientas { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; }
+.ver-como { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ver-como .rotulo { font-weight: 700; margin-right: 4px; }
+.persona { font: inherit; font-size: .92rem; font-weight: 600; padding: 6px 12px; border-radius: 99px; border: 1.5px solid var(--linea); background: var(--tarjeta); color: var(--tinta); cursor: pointer; }
+.persona[aria-pressed="true"] { border-color: var(--frambuesa); background: var(--frambuesa-suave); }
+.persona:focus-visible, .boton:focus-visible, .mover:focus-visible { outline: 3px solid var(--frambuesa); outline-offset: 2px; }
+.boton { font: inherit; font-weight: 700; padding: 9px 14px; border-radius: 9px; border: 0; background: var(--frambuesa); color: #ffffff; cursor: pointer; }
+.aviso { margin: 0; font-size: .9rem; color: var(--tinta-suave); }
+form.nueva { display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)) auto; gap: 10px; align-items: end; padding: 14px; border-radius: 12px; background: var(--tarjeta); border: 1px solid var(--linea); }
+form.nueva label { display: grid; gap: 4px; font-size: .85rem; font-weight: 700; min-width: 0; }
+form.nueva input, form.nueva select { font: inherit; font-weight: 400; padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--linea); background: var(--fondo); color: var(--tinta); min-width: 0; width: 100%; }
+form.nueva .error { grid-column: 1 / -1; color: var(--retraso); font-size: .9rem; margin: 0; }
+.tablero { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.col { background: var(--columna); border-radius: 12px; padding: 12px; display: grid; gap: 10px; min-height: 160px; align-content: start; transition: box-shadow .15s; }
+.col.encima { box-shadow: inset 0 0 0 2px var(--frambuesa); }
+.col h2 { font-family: var(--f-titulo); font-weight: 700; font-size: 1rem; margin: 0; display: flex; justify-content: space-between; align-items: center; }
+.col h2 .cuenta { font-family: var(--f-dato); font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--tarjeta); color: var(--tinta-suave); }
+.vacia { font-size: .9rem; color: var(--tinta-suave); padding: 10px; border: 1.5px dashed var(--linea); border-radius: 10px; text-align: center; }
+.tarea { background: var(--tarjeta); border-radius: 10px; padding: 12px; display: grid; gap: 8px; border: 1px solid var(--linea); cursor: grab; }
+.tarea:active { cursor: grabbing; }
+.tarea.arrastrando { opacity: .5; }
+.tarea .titulo-tarea { font-weight: 700; overflow-wrap: anywhere; }
+.tarea .pie { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; justify-content: space-between; }
+.etiqueta { font-family: var(--f-dato); font-size: 11px; letter-spacing: .04em; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; }
+.etiqueta.web { color: var(--web); }
+.etiqueta.contenido { color: var(--contenido); }
+.etiqueta.cliente { color: var(--cliente); }
+.quien { font-size: .88rem; color: var(--tinta-suave); }
+.plazo { font-family: var(--f-dato); font-size: 12px; color: var(--tinta-suave); }
+.plazo.tarde { color: var(--retraso); font-weight: 600; }
+.mover-fila { display: flex; gap: 6px; justify-content: flex-end; }
+.mover { font: inherit; font-size: .82rem; padding: 3px 9px; border-radius: 7px; border: 1px solid var(--linea); background: transparent; color: var(--tinta); cursor: pointer; }
+.mover:disabled { opacity: .35; cursor: default; }
+footer { font-size: .85rem; color: var(--tinta-suave); border-top: 1px solid var(--linea); padding-top: 14px; }
+@media (max-width: 900px) {
+  form.nueva { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  form.nueva .ancho { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) { .tablero { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 420px) { form.nueva { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="marco">
+  <header>
+    <h1>Tablero de tareas del equipo</h1>
+    <span class="hoy" id="hoy"></span>
+  </header>
+
+  <div class="herramientas">
+    <div class="ver-como" id="ver-como" role="group" aria-label="Ver las tareas de"><span class="rotulo">Ver como</span></div>
+    <button type="button" class="boton" id="abrir-nueva" aria-expanded="false" aria-controls="nueva">Nueva tarea</button>
+  </div>
+
+  <form class="nueva" id="nueva" hidden novalidate>
+    <label class="ancho" for="n-titulo">Qué hay que hacer<input id="n-titulo" maxlength="90" placeholder="Por ejemplo: revisar los textos de la portada"></label>
+    <label for="n-persona">Quién<select id="n-persona"></select></label>
+    <label for="n-etiqueta">Tipo<select id="n-etiqueta"></select></label>
+    <label for="n-plazo">Para cuándo<input type="date" id="n-plazo"></label>
+    <button type="submit" class="boton">Añadir</button>
+    <p class="error" id="n-error" hidden></p>
+  </form>
+
+  <p class="aviso" id="aviso"></p>
+
+  <div class="tablero" id="tablero"></div>
+
+  <footer>Ejemplo del curso «Del artefacto a la web con Claude Code». Las personas y las tareas son inventadas, y al recargar la página todo vuelve a como estaba.</footer>
+</div>
+
+<script>
+// Datos del tablero: columnas, personas, tipos y tareas de ejemplo, aparte del diseño.
+// Los plazos van en días desde hoy, para que el ejemplo siempre tenga tareas a tiempo y alguna con retraso.
+const TABLERO = {
+  columnas: [
+    { id: "hacer", nombre: "Por hacer" },
+    { id: "curso", nombre: "En curso" },
+    { id: "hecho", nombre: "Hecho" }
+  ],
+  personas: ["Ana", "Luis", "Marta"],
+  tipos: [
+    { id: "web", nombre: "Web" },
+    { id: "contenido", nombre: "Contenido" },
+    { id: "cliente", nombre: "Cliente" }
+  ],
+  tareas: [
+    { titulo: "Revisar los textos de la portada", persona: "Ana", tipo: "contenido", plazo: 2, columna: "hacer" },
+    { titulo: "Pasar la propuesta al proyecto de la web", persona: "Luis", tipo: "web", plazo: 4, columna: "curso" },
+    { titulo: "Llamar para cerrar la fecha de la demo", persona: "Marta", tipo: "cliente", plazo: -1, columna: "hacer" },
+    { titulo: "Poner el formulario del CRM en la web", persona: "Luis", tipo: "web", plazo: 6, columna: "hacer" },
+    { titulo: "Escribir la entrada del blog sobre el piloto", persona: "Ana", tipo: "contenido", plazo: -2, columna: "curso" },
+    { titulo: "Enviar el acta de la reunión", persona: "Marta", tipo: "cliente", plazo: -3, columna: "hecho" },
+    { titulo: "Comprobar la web en el móvil", persona: "Ana", tipo: "web", plazo: 1, columna: "hecho" }
+  ]
+};
+
+const $ = (id) => document.getElementById(id);
+const corta = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short" });
+const larga = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long" });
+const hoy = new Date(); hoy.setHours(12, 0, 0, 0);
+const masDias = (d) => { const f = new Date(hoy); f.setDate(f.getDate() + d); return f; };
+const isoDia = (f) => `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, "0")}-${String(f.getDate()).padStart(2, "0")}`;
+
+let siguienteId = 1;
+const tareas = TABLERO.tareas.map((t) => ({ ...t, id: siguienteId++, plazo: masDias(t.plazo) }));
+let verComo = "Todas";
+
+function pintarPersonas() {
+  const nombres = ["Todas", ...TABLERO.personas];
+  $("ver-como").insertAdjacentHTML("beforeend", nombres.map((n) =>
+    `<button type="button" class="persona" id="ver-${n}" data-persona="${n}" aria-pressed="${n === verComo}">${n}</button>`).join(""));
+  $("ver-como").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-persona]");
+    if (!b) return;
+    verComo = b.dataset.persona;
+    for (const x of document.querySelectorAll(".persona")) x.setAttribute("aria-pressed", String(x.dataset.persona === verComo));
+    pintar();
+  });
+}
+
+function pintar() {
+  const visibles = tareas.filter((t) => verComo === "Todas" || t.persona === verComo);
+  $("aviso").textContent = verComo === "Todas"
+    ? "Ves las tareas de todo el equipo. Elige una persona para ver solo las suyas."
+    : `Ves solo las tareas de ${verComo}. Aquí es un filtro de la página; con un backend y sus reglas de acceso, ${verComo} no recibiría las de los demás.`;
+  $("tablero").innerHTML = TABLERO.columnas.map((c, ci) => {
+    const deEsta = visibles.filter((t) => t.columna === c.id).sort((a, b) => a.plazo - b.plazo);
+    const tarjetas = deEsta.map((t) => {
+      const tarde = c.id !== "hecho" && t.plazo < hoy;
+      const tipo = TABLERO.tipos.find((x) => x.id === t.tipo);
+      return `<article class="tarea" draggable="true" data-id="${t.id}" aria-label="${t.titulo}">
+        <span class="titulo-tarea">${t.titulo}</span>
+        <div class="pie"><span class="etiqueta ${t.tipo}">${tipo.nombre}</span><span class="quien">${t.persona}</span>
+          <span class="plazo ${tarde ? "tarde" : ""}">${tarde ? "Con retraso · " : ""}${corta.format(t.plazo)}</span></div>
+        <div class="mover-fila">
+          <button type="button" class="mover" data-mover="${t.id}" data-paso="-1" ${ci === 0 ? "disabled" : ""} aria-label="Mover a ${TABLERO.columnas[ci - 1]?.nombre ?? ""}">←</button>
+          <button type="button" class="mover" data-mover="${t.id}" data-paso="1" ${ci === TABLERO.columnas.length - 1 ? "disabled" : ""} aria-label="Mover a ${TABLERO.columnas[ci + 1]?.nombre ?? ""}">→</button>
+        </div></article>`;
+    }).join("");
+    return `<section class="col" data-columna="${c.id}" aria-labelledby="col-${c.id}">
+      <h2 id="col-${c.id}">${c.nombre}<span class="cuenta">${deEsta.length}</span></h2>
+      ${tarjetas || `<div class="vacia">Nada por aquí. Arrastra una tarea o usa las flechas.</div>`}
+    </section>`;
+  }).join("");
+}
+
+function mover(id, columna) {
+  const t = tareas.find((x) => x.id === id);
+  if (t && columna) { t.columna = columna; pintar(); }
+}
+
+$("tablero").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-mover]");
+  if (!b) return;
+  const t = tareas.find((x) => x.id === Number(b.dataset.mover));
+  const i = TABLERO.columnas.findIndex((c) => c.id === t.columna) + Number(b.dataset.paso);
+  mover(t.id, TABLERO.columnas[i]?.id);
+});
+$("tablero").addEventListener("dragstart", (e) => {
+  const a = e.target.closest(".tarea");
+  if (!a) return;
+  e.dataTransfer.setData("text/plain", a.dataset.id);
+  a.classList.add("arrastrando");
+});
+$("tablero").addEventListener("dragend", (e) => e.target.closest(".tarea")?.classList.remove("arrastrando"));
+$("tablero").addEventListener("dragover", (e) => {
+  const col = e.target.closest(".col");
+  if (!col) return;
+  e.preventDefault();
+  for (const c of document.querySelectorAll(".col")) c.classList.toggle("encima", c === col);
+});
+$("tablero").addEventListener("dragleave", (e) => { if (!e.relatedTarget?.closest?.(".col")) e.target.closest(".col")?.classList.remove("encima"); });
+$("tablero").addEventListener("drop", (e) => {
+  const col = e.target.closest(".col");
+  if (!col) return;
+  e.preventDefault();
+  col.classList.remove("encima");
+  mover(Number(e.dataTransfer.getData("text/plain")), col.dataset.columna);
+});
+
+function prepararFormulario() {
+  $("n-persona").innerHTML = TABLERO.personas.map((p) => `<option>${p}</option>`).join("");
+  $("n-etiqueta").innerHTML = TABLERO.tipos.map((t) => `<option value="${t.id}">${t.nombre}</option>`).join("");
+  $("n-plazo").value = isoDia(masDias(7));
+  $("abrir-nueva").addEventListener("click", () => {
+    const abierto = $("nueva").hidden;
+    $("nueva").hidden = !abierto;
+    $("abrir-nueva").setAttribute("aria-expanded", String(abierto));
+    if (abierto) $("n-titulo").focus();
+  });
+  $("nueva").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const titulo = $("n-titulo").value.trim();
+    if (!titulo) { $("n-error").textContent = "Escribe qué hay que hacer antes de añadir la tarea."; $("n-error").hidden = false; return; }
+    const [a, m, d] = ($("n-plazo").value || isoDia(masDias(7))).split("-").map(Number);
+    tareas.push({ id: siguienteId++, titulo, persona: $("n-persona").value, tipo: $("n-etiqueta").value, plazo: new Date(a, m - 1, d, 12), columna: "hacer" });
+    $("n-titulo").value = "";
+    $("n-error").hidden = true;
+    pintar();
+  });
+}
+
+$("hoy").textContent = `Hoy es ${larga.format(hoy)}`;
+pintarPersonas();
+prepararFormulario();
+pintar();
+</script>
+</body>
+</html>

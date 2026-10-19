@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal de proyecto del cliente</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Public+Sans:wght@400;600;700&family=Fragment+Mono&display=swap">
+<style>
+/* Maqueta: barra de sesión arriba, el avance del proyecto como cabecera y, debajo, fases, documentos y mensajes en rejilla */
+:root {
+  --fondo: #f3f5fb;
+  --hoja: #ffffff;
+  --tinta: #0e1b4d;
+  --tinta-suave: #56608a;
+  --cobalto: #2b59ff;
+  --cobalto-suave: #e2e9ff;
+  --melocoton: #ffb49e;
+  --hecho: #16935a;
+  --en-curso: #c77d00;
+  --pendiente: #9aa2bf;
+  --linea: #dbe0ef;
+  --f-titulo: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-texto: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --f-dato: "Fragment Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #0b1130; --hoja: #131b42; --tinta: #e8ecff; --tinta-suave: #a5afd6;
+    --cobalto: #7c9bff; --cobalto-suave: #1f2b63; --melocoton: #ffb49e;
+    --hecho: #4cd28f; --en-curso: #f2b13e; --pendiente: #5d6694; --linea: #263066;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #0b1130; --hoja: #131b42; --tinta: #e8ecff; --tinta-suave: #a5afd6;
+  --cobalto: #7c9bff; --cobalto-suave: #1f2b63; --melocoton: #ffb49e;
+  --hecho: #4cd28f; --en-curso: #f2b13e; --pendiente: #5d6694; --linea: #263066;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--fondo); color: var(--tinta);
+  font-family: var(--f-texto); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 40px;
+}
+.marco { max-width: 1120px; margin: 0 auto; display: grid; gap: 22px; }
+.sesion { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 10px 14px; border-radius: 10px; background: var(--hoja); border: 1px solid var(--linea); }
+.sesion .quien { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-titulo); font-weight: 800; background: var(--melocoton); color: #0e1b4d; flex: none; }
+.sesion .correo { font-family: var(--f-dato); font-size: 13px; color: var(--tinta-suave); overflow-wrap: anywhere; }
+.botones { display: flex; gap: 8px; flex-wrap: wrap; }
+.boton { font: inherit; font-size: .9rem; font-weight: 600; padding: 7px 12px; border-radius: 8px; border: 1.5px solid var(--linea); background: transparent; color: var(--tinta); cursor: pointer; }
+.boton:hover { border-color: var(--cobalto); }
+.boton.principal { background: var(--cobalto); border-color: var(--cobalto); color: #ffffff; }
+.boton:focus-visible { outline: 3px solid var(--cobalto); outline-offset: 2px; }
+.aviso { margin: 0; font-size: .9rem; color: var(--tinta-suave); padding-left: 12px; border-left: 3px solid var(--melocoton); }
+.cabecera { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 28px; align-items: end; }
+.cabecera .sector { font-family: var(--f-dato); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--cobalto); }
+h1 { font-family: var(--f-titulo); font-weight: 800; font-size: clamp(1.9rem, 4.4vw, 3rem); line-height: 1.05; margin: 4px 0 6px; text-wrap: balance; letter-spacing: -.015em; }
+.cabecera p { margin: 0; color: var(--tinta-suave); max-width: 60ch; }
+.avance { display: grid; justify-items: end; gap: 4px; }
+.avance .pct { font-family: var(--f-titulo); font-weight: 800; font-size: clamp(3rem, 7vw, 4.4rem); line-height: .9; color: var(--cobalto); font-variant-numeric: tabular-nums; }
+.avance .que { font-size: .9rem; color: var(--tinta-suave); }
+.barra { grid-column: 1 / -1; height: 10px; border-radius: 99px; background: var(--cobalto-suave); overflow: hidden; }
+.barra span { display: block; height: 100%; background: var(--cobalto); border-radius: 99px; transition: width .4s; }
+.rejilla { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.panel { background: var(--hoja); border: 1px solid var(--linea); border-radius: 12px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.panel h2 { font-family: var(--f-titulo); font-weight: 700; font-size: 1.15rem; margin: 0; }
+.columna { display: grid; gap: 18px; min-width: 0; }
+.fases { list-style: none; margin: 0; padding: 0; display: grid; }
+.fases li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 10px 0; border-top: 1px solid var(--linea); }
+.fases li:first-child { border-top: 0; }
+.fases .bola { width: 14px; height: 14px; border-radius: 50%; margin-top: 4px; border: 2px solid var(--pendiente); }
+.fases li.hecho .bola { background: var(--hecho); border-color: var(--hecho); }
+.fases li.en-curso .bola { border-color: var(--en-curso); box-shadow: inset 0 0 0 3px var(--hoja); background: var(--en-curso); }
+.fases .nombre { font-weight: 600; }
+.fases .detalle { display: block; font-size: .9rem; color: var(--tinta-suave); }
+.fases .fecha { font-family: var(--f-dato); font-size: 12px; color: var(--tinta-suave); white-space: nowrap; }
+.estado { font-family: var(--f-dato); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; justify-self: start; margin-top: 4px; display: inline-block; }
+.estado.hecho { color: var(--hecho); background: color-mix(in srgb, var(--hecho) 14%, transparent); }
+.estado.en-curso { color: var(--en-curso); background: color-mix(in srgb, var(--en-curso) 16%, transparent); }
+.estado.pendiente { color: var(--tinta-suave); background: color-mix(in srgb, var(--pendiente) 18%, transparent); }
+.proxima { display: grid; gap: 2px; padding: 14px; border-radius: 10px; background: var(--cobalto-suave); }
+.proxima .cuando { font-family: var(--f-titulo); font-weight: 700; font-size: 1.25rem; }
+.docs, .mensajes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.docs li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: center; }
+.docs .tipo { width: 34px; height: 40px; border-radius: 5px; border: 1.5px solid var(--linea); display: grid; place-items: end center; padding-bottom: 4px; font-family: var(--f-dato); font-size: 9px; color: var(--cobalto); }
+.docs .titulo-doc { font-weight: 600; overflow-wrap: anywhere; }
+.docs .fecha-doc { font-family: var(--f-dato); font-size: 12px; color: var(--tinta-suave); }
+.mensajes li { display: grid; gap: 2px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--linea); }
+.mensajes .de { font-size: .85rem; color: var(--tinta-suave); }
+.acceso { max-width: 440px; margin: 40px auto; display: grid; gap: 14px; }
+.acceso h1 { font-size: 2rem; }
+.cuenta-demo { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px; border: 1.5px solid var(--linea); border-radius: 10px; background: var(--hoja); }
+.cuenta-demo .correo { font-family: var(--f-dato); font-size: 13px; color: var(--tinta-suave); overflow-wrap: anywhere; }
+footer { font-size: .85rem; color: var(--tinta-suave); border-top: 1px solid var(--linea); padding-top: 14px; }
+@media (max-width: 860px) {
+  .rejilla { grid-template-columns: minmax(0, 1fr); }
+  .cabecera { grid-template-columns: minmax(0, 1fr); }
+  .avance { justify-items: start; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="marco">
+  <div id="portal">
+    <div class="sesion">
+      <div class="quien"><span class="avatar" id="avatar"></span><div><strong id="nombre-cliente"></strong><div class="correo" id="correo"></div></div></div>
+      <div class="botones">
+        <button type="button" class="boton" id="cambiar">Entrar como el otro cliente</button>
+        <button type="button" class="boton" id="salir">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="aviso" id="aviso">En este ejemplo los dos clientes están dentro de la misma página y el portal solo elige cuál enseñar. Con un backend y sus reglas de acceso, cada cliente recibiría únicamente lo suyo.</p>
+
+  <main id="contenido"></main>
+
+  <footer>Ejemplo del curso «Del artefacto a la web con Claude Code». Los clientes, los proyectos y los mensajes son inventados.</footer>
+</div>
+
+<script>
+// Datos del portal: un proyecto por cliente, aparte del diseño.
+const PORTAL = {
+  clientes: [
+    { id: "clinica", inicial: "C", nombre: "Clínica dental", correo: "direccion@clinica.example.com",
+      proyecto: "Cita previa en línea y recordatorios",
+      resumen: "Los pacientes piden cita desde la web y reciben un recordatorio el día antes. Menos llamadas en recepción y menos citas perdidas.",
+      fases: [
+        { nombre: "Análisis de la agenda actual", detalle: "Tipos de cita, duraciones y horarios de cada sala.", estado: "hecho", fecha: "2026-09-25" },
+        { nombre: "Diseño de la reserva", detalle: "Pantallas de la web aprobadas por dirección.", estado: "hecho", fecha: "2026-10-09" },
+        { nombre: "Conexión con la agenda", detalle: "Las citas de la web entran solas en la agenda de la clínica.", estado: "en-curso", fecha: "2026-10-30" },
+        { nombre: "Recordatorios", detalle: "Mensaje el día antes, con opción de anular.", estado: "pendiente", fecha: "2026-11-13" },
+        { nombre: "Puesta en marcha", detalle: "Una semana de prueba con la mitad de las salas.", estado: "pendiente", fecha: "2026-11-27" }
+      ],
+      proxima: { fecha: "2026-10-22T10:00", tema: "Revisión de la conexión con la agenda" },
+      documentos: [
+        { titulo: "Acta de arranque", tipo: "PDF", fecha: "2026-09-18" },
+        { titulo: "Pantallas de la reserva aprobadas", tipo: "PDF", fecha: "2026-10-09" },
+        { titulo: "Lista de tipos de cita", tipo: "XLSX", fecha: "2026-09-24" }
+      ],
+      mensajes: [
+        { de: "Equipo del proyecto", fecha: "2026-10-16", texto: "La prueba con la agenda ha ido bien con dos salas. La semana que viene probamos las cinco." },
+        { de: "Equipo del proyecto", fecha: "2026-10-09", texto: "Dirección ha aprobado las pantallas. Pasamos a la conexión." }
+      ] },
+    { id: "estudio", inicial: "E", nombre: "Estudio de arquitectura", correo: "socios@estudio.example.com",
+      proyecto: "Archivo de proyectos con búsqueda",
+      resumen: "Todos los proyectos del estudio, con planos y memorias, en un archivo donde se busca por obra, cliente o material.",
+      fases: [
+        { nombre: "Inventario del archivo", detalle: "Carpetas, discos y versiones de los últimos diez años.", estado: "hecho", fecha: "2026-09-30" },
+        { nombre: "Orden y nombres", detalle: "Una forma única de nombrar obras y documentos.", estado: "en-curso", fecha: "2026-10-28" },
+        { nombre: "Buscador", detalle: "Búsqueda por obra, cliente, año y material.", estado: "pendiente", fecha: "2026-11-20" },
+        { nombre: "Formación del equipo", detalle: "Dos sesiones cortas para todo el estudio.", estado: "pendiente", fecha: "2026-12-04" }
+      ],
+      proxima: { fecha: "2026-10-27T16:30", tema: "Validar la norma de nombres" },
+      documentos: [
+        { titulo: "Inventario del archivo", tipo: "XLSX", fecha: "2026-09-30" },
+        { titulo: "Propuesta de norma de nombres", tipo: "PDF", fecha: "2026-10-14" }
+      ],
+      mensajes: [
+        { de: "Equipo del proyecto", fecha: "2026-10-14", texto: "Te dejamos la propuesta de nombres. Nos interesa sobre todo tu opinión sobre las fechas." }
+      ] }
+  ],
+  inicial: "clinica"
+};
+
+const $ = (id) => document.getElementById(id);
+const fecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
+const fechaHora = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
+const textoEstado = { "hecho": "Hecho", "en-curso": "En curso", "pendiente": "Pendiente" };
+const aFecha = (t) => new Date(t.length === 10 ? t + "T12:00" : t);
+let actual = PORTAL.inicial;
+
+function avance(c) {
+  const peso = { "hecho": 1, "en-curso": .5, "pendiente": 0 };
+  return Math.round((c.fases.reduce((s, f) => s + peso[f.estado], 0) / c.fases.length) * 100);
+}
+
+function pintarPortal() {
+  const c = PORTAL.clientes.find((x) => x.id === actual);
+  $("portal").hidden = false;
+  $("aviso").hidden = false;
+  $("avatar").textContent = c.inicial;
+  $("nombre-cliente").textContent = c.nombre;
+  $("correo").textContent = c.correo;
+  const pct = avance(c);
+  const hechas = c.fases.filter((f) => f.estado === "hecho").length;
+  $("contenido").innerHTML = `
+    <section class="cabecera" aria-label="Avance del proyecto">
+      <div><span class="sector">Tu proyecto</span><h1>${c.proyecto}</h1><p>${c.resumen}</p></div>
+      <div class="avance"><span class="pct">${pct} %</span><span class="que">${hechas} de ${c.fases.length} fases terminadas</span></div>
+      <div class="barra" aria-hidden="true"><span style="width:${pct}%"></span></div>
+    </section>
+    <div class="rejilla" style="margin-top:22px">
+      <section class="panel" aria-labelledby="t-fases">
+        <h2 id="t-fases">Fases</h2>
+        <ol class="fases">${c.fases.map((f) => `<li class="${f.estado}">
+          <span class="bola" aria-hidden="true"></span>
+          <span><span class="nombre">${f.nombre}</span><span class="detalle">${f.detalle}</span><span class="estado ${f.estado}">${textoEstado[f.estado]}</span></span>
+          <span class="fecha">${fecha.format(aFecha(f.fecha))}</span></li>`).join("")}</ol>
+      </section>
+      <div class="columna">
+        <section class="panel" aria-labelledby="t-proxima">
+          <h2 id="t-proxima">Próxima reunión</h2>
+          <div class="proxima"><span class="cuando">${fechaHora.format(aFecha(c.proxima.fecha))}</span><span>${c.proxima.tema}</span></div>
+        </section>
+        <section class="panel" aria-labelledby="t-docs">
+          <h2 id="t-docs">Documentos</h2>
+          <ul class="docs">${c.documentos.map((d) => `<li><span class="tipo">${d.tipo}</span>
+            <span><span class="titulo-doc">${d.titulo}</span><br><span class="fecha-doc">${fecha.format(aFecha(d.fecha))}</span></span></li>`).join("")}</ul>
+        </section>
+        <section class="panel" aria-labelledby="t-mensajes">
+          <h2 id="t-mensajes">Mensajes del equipo</h2>
+          <ul class="mensajes">${c.mensajes.map((m) => `<li><span class="de">${m.de} · ${fecha.format(aFecha(m.fecha))}</span><span>${m.texto}</span></li>`).join("")}</ul>
+        </section>
+      </div>
+    </div>`;
+  const otro = PORTAL.clientes.find((x) => x.id !== actual);
+  $("cambiar").textContent = `Entrar como ${otro.nombre.toLowerCase()}`;
+}
+
+function pintarAcceso() {
+  $("portal").hidden = true;
+  $("aviso").hidden = true;
+  $("contenido").innerHTML = `
+    <section class="acceso" aria-labelledby="t-acceso">
+      <h1 id="t-acceso">Entra en tu portal</h1>
+      <p>Elige una de las dos cuentas de ejemplo. En la versión con backend, aquí iría el inicio de sesión de verdad.</p>
+      ${PORTAL.clientes.map((c) => `<div class="cuenta-demo"><span class="avatar">${c.inicial}</span>
+        <span><strong>${c.nombre}</strong><br><span class="correo">${c.correo}</span></span>
+        <button type="button" class="boton principal" data-entrar="${c.id}" id="entrar-${c.id}">Entrar</button></div>`).join("")}
+    </section>`;
+}
+
+$("cambiar").addEventListener("click", () => { actual = PORTAL.clientes.find((x) => x.id !== actual).id; pintarPortal(); });
+$("salir").addEventListener("click", pintarAcceso);
+$("contenido").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-entrar]");
+  if (b) { actual = b.dataset.entrar; pintarPortal(); }
+});
+pintarPortal();
+</script>
+</body>
+</html>

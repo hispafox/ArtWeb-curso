@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta de asistente IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Maqueta: documento de propuesta a la izquierda, resumen fijo a la derecha; en móvil, una columna con el resumen al final */
+:root {
+  --papel: #f5f7f3;
+  --hoja: #ffffff;
+  --tinta: #13302d;
+  --tinta-suave: #4b625e;
+  --pino: #2f6f68;
+  --azafran: #e3b02a;
+  --azafran-suave: #fbf0cf;
+  --linea: #d6ded9;
+  --nada: #a9b6b2;
+  --f-titulo: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-texto: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-dato: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papel: #0e1a19; --hoja: #142422; --tinta: #e4ede9; --tinta-suave: #a3b6b1;
+    --pino: #74b8ad; --azafran: #f0c44c; --azafran-suave: #3a3216; --linea: #2a3d3a; --nada: #50625e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --papel: #0e1a19; --hoja: #142422; --tinta: #e4ede9; --tinta-suave: #a3b6b1;
+  --pino: #74b8ad; --azafran: #f0c44c; --azafran-suave: #3a3216; --linea: #2a3d3a; --nada: #50625e;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--papel); color: var(--tinta);
+  font-family: var(--f-texto); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 48px;
+}
+.marco { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; align-items: start; }
+.documento { display: grid; gap: 40px; min-width: 0; }
+header.cabecera { display: grid; gap: 14px; }
+.referencia { font-family: var(--f-dato); font-size: 13px; letter-spacing: .04em; color: var(--pino); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+h1 { font-family: var(--f-titulo); font-weight: 800; font-size: clamp(2rem, 4.6vw, 3.3rem); line-height: 1.04; margin: 0; letter-spacing: -.02em; text-wrap: balance; }
+h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--azafran-suave) 62%); }
+.entradilla { max-width: 62ch; font-size: 1.08rem; color: var(--tinta-suave); margin: 0; }
+h2 { font-family: var(--f-titulo); font-weight: 700; font-size: 1.45rem; margin: 0 0 4px; text-wrap: balance; }
+.paso { font-family: var(--f-dato); font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--tinta-suave); }
+section { display: grid; gap: 16px; }
+.planes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.plan { position: relative; display: grid; gap: 8px; align-content: start; padding: 18px; border: 1.5px solid var(--linea); border-radius: 10px; background: var(--hoja); cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.plan input { position: absolute; opacity: 0; pointer-events: none; }
+.plan:hover { border-color: var(--pino); }
+.plan:has(input:checked) { border-color: var(--azafran); box-shadow: 0 0 0 3px var(--azafran-suave); }
+.plan:has(input:focus-visible) { outline: 3px solid var(--pino); outline-offset: 2px; }
+.plan .nombre { font-family: var(--f-titulo); font-weight: 700; font-size: 1.2rem; }
+.plan .lema { color: var(--tinta-suave); font-size: .95rem; }
+.plan .cifras { font-family: var(--f-dato); font-size: 13px; display: flex; gap: 12px; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
+.plan .marca { justify-self: start; font-family: var(--f-dato); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; background: var(--azafran-suave); color: var(--tinta); visibility: hidden; }
+.plan:has(input:checked) .marca { visibility: visible; }
+.ajustes { display: grid; gap: 12px; padding: 18px; border-radius: 10px; background: var(--hoja); border: 1px solid var(--linea); }
+.fila-fecha { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.fila-fecha label { font-weight: 700; }
+input[type="date"] { font: inherit; font-family: var(--f-dato); padding: 6px 10px; border: 1.5px solid var(--linea); border-radius: 8px; background: var(--papel); color: var(--tinta); }
+input[type="date"]:focus-visible { outline: 3px solid var(--pino); outline-offset: 1px; }
+.extra { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 12px; align-items: start; padding: 12px 0; border-top: 1px solid var(--linea); cursor: pointer; }
+.extra input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--pino); }
+.extra .titulo-extra { font-weight: 700; }
+.extra .detalle { grid-column: 2; color: var(--tinta-suave); font-size: .92rem; }
+.extra .coste { font-family: var(--f-dato); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.extra.incluido { opacity: .55; cursor: default; }
+.incluye { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; }
+.incluye li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: start; }
+.incluye .icono { font-family: var(--f-dato); font-weight: 600; color: var(--pino); }
+.incluye li.no { color: var(--nada); }
+.incluye li.no .icono { color: var(--nada); }
+.calendario { overflow-x: auto; background: var(--hoja); border: 1px solid var(--linea); border-radius: 10px; padding: 16px; }
+.gantt { min-width: 560px; display: grid; gap: 8px; }
+.gantt .fila { display: grid; grid-template-columns: 170px minmax(0, 1fr); align-items: center; gap: 12px; }
+.gantt .fase { font-size: .92rem; }
+.gantt .pista { position: relative; height: 22px; background: repeating-linear-gradient(90deg, var(--linea) 0 1px, transparent 1px calc(100% / var(--semanas))); border-radius: 4px; }
+.gantt .barra { position: absolute; top: 3px; bottom: 3px; border-radius: 4px; background: var(--pino); transition: left .25s, width .25s; }
+.gantt .barra.acomp { background: transparent; border: 1.5px dashed var(--pino); }
+.gantt .escala { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 12px; font-family: var(--f-dato); font-size: 11px; color: var(--tinta-suave); }
+.gantt .escala .marcas { display: flex; justify-content: space-between; }
+.nota-cal { font-size: .88rem; color: var(--tinta-suave); margin: 0; }
+aside.resumen { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: grid; gap: 16px; padding: 22px; background: var(--tinta); color: var(--papel); border-radius: 12px; }
+aside.resumen h2 { color: var(--papel); font-size: 1.2rem; }
+.datos { display: grid; gap: 10px; margin: 0; }
+.datos div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid color-mix(in srgb, var(--papel) 18%, transparent); padding-bottom: 8px; }
+.datos dt { color: color-mix(in srgb, var(--papel) 72%, transparent); }
+.datos dd { margin: 0; font-family: var(--f-dato); font-variant-numeric: tabular-nums; text-align: right; }
+.inversion { display: grid; gap: 2px; }
+.inversion .cifra { font-family: var(--f-titulo); font-weight: 800; font-size: 2.2rem; line-height: 1; color: var(--azafran); font-variant-numeric: tabular-nums; }
+.inversion small { color: color-mix(in srgb, var(--papel) 70%, transparent); }
+button.aceptar { font: inherit; font-weight: 700; padding: 12px 16px; border: 0; border-radius: 8px; background: var(--azafran); color: #13302d; cursor: pointer; }
+button.aceptar:hover { filter: brightness(1.05); }
+button.aceptar:focus-visible { outline: 3px solid var(--papel); outline-offset: 2px; }
+.aceptado { font-size: .92rem; background: color-mix(in srgb, var(--papel) 10%, transparent); border-radius: 8px; padding: 12px; margin: 0; }
+footer { grid-column: 1 / -1; font-size: .85rem; color: var(--tinta-suave); border-top: 1px solid var(--linea); padding-top: 16px; }
+@media (max-width: 900px) {
+  .marco { grid-template-columns: minmax(0, 1fr); }
+  aside.resumen { position: static; }
+}
+@media (max-width: 640px) {
+  .planes { grid-template-columns: minmax(0, 1fr); }
+  .incluye { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="marco">
+  <main class="documento">
+    <header class="cabecera">
+      <div class="referencia"><span>PROPUESTA PRO-2026-041</span><span id="fecha-propuesta"></span><span id="validez"></span></div>
+      <h1>Un asistente de IA para tu <em>atención al cliente</em></h1>
+      <p class="entradilla">Tu equipo contesta cada día las mismas preguntas por la web y por correo. Te proponemos un asistente que responde las habituales a cualquier hora y pasa a una persona lo que no sabe resolver. Elige hasta dónde quieres llegar: al momento verás qué incluye, cuánto dura y cuánto cuesta.</p>
+    </header>
+
+    <section aria-labelledby="t-plan">
+      <div><span class="paso">Paso 1</span><h2 id="t-plan">Elige el plan</h2></div>
+      <div class="planes" id="planes" role="radiogroup" aria-labelledby="t-plan"></div>
+    </section>
+
+    <section aria-labelledby="t-ajustes">
+      <div><span class="paso">Paso 2</span><h2 id="t-ajustes">Ajusta los detalles</h2></div>
+      <div class="ajustes">
+        <div class="fila-fecha">
+          <label for="inicio">¿Cuándo empezamos?</label>
+          <input type="date" id="inicio">
+          <span class="paso" id="dia-semana"></span>
+        </div>
+        <div id="extras"></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-incluye">
+      <div><span class="paso">Paso 3</span><h2 id="t-incluye">Qué incluye</h2></div>
+      <ul class="incluye" id="incluye"></ul>
+    </section>
+
+    <section aria-labelledby="t-calendario">
+      <div><span class="paso">Paso 4</span><h2 id="t-calendario">El calendario</h2></div>
+      <div class="calendario"><div class="gantt" id="gantt"></div></div>
+      <p class="nota-cal" id="nota-cal"></p>
+    </section>
+  </main>
+
+  <aside class="resumen" aria-live="polite">
+    <h2>Tu elección</h2>
+    <dl class="datos">
+      <div><dt>Plan</dt><dd id="r-plan"></dd></div>
+      <div><dt>Duración</dt><dd id="r-semanas"></dd></div>
+      <div><dt>Arranque</dt><dd id="r-inicio"></dd></div>
+      <div><dt>Puesta en marcha</dt><dd id="r-fin"></dd></div>
+      <div><dt>Formación</dt><dd id="r-formacion"></dd></div>
+      <div><dt>Equipo</dt><dd id="r-equipo"></dd></div>
+    </dl>
+    <div class="inversion">
+      <span class="paso" style="color: inherit; opacity: .75">Inversión</span>
+      <span class="cifra" id="r-precio"></span>
+      <small>IVA no incluido</small>
+    </div>
+    <button class="aceptar" id="aceptar" type="button">Aceptar este plan</button>
+    <p class="aceptado" id="aceptado" hidden></p>
+  </aside>
+
+  <footer>Ejemplo del curso «Del artefacto a la web con Claude Code». La empresa, los planes y las cifras son inventados.</footer>
+</div>
+
+<script>
+// Datos de la propuesta: todo lo que cambia está aquí, separado del diseño.
+const PROPUESTA = {
+  fecha: "2026-10-19",
+  diasValidez: 30,
+  inicioPorDefecto: "2026-11-02",
+  fases: ["Descubrimiento", "Diseño de respuestas", "Construcción", "Pruebas con usuarios", "Formación y arranque"],
+  alcance: [
+    { id: "web", texto: "Asistente en la web" },
+    { id: "correo", texto: "Respuestas por correo" },
+    { id: "whatsapp", texto: "Canal de WhatsApp" },
+    { id: "faq", texto: "Las 50 preguntas más frecuentes" },
+    { id: "base", texto: "Base de conocimiento completa" },
+    { id: "crm", texto: "Conexión con tu CRM" },
+    { id: "panel", texto: "Panel con lo que pregunta la gente" },
+    { id: "informe", texto: "Informe de resultados al terminar" },
+    { id: "soporte", texto: "Tres meses de soporte tras el arranque" }
+  ],
+  planes: [
+    { id: "piloto", nombre: "Piloto", lema: "Para probarlo en un canal y ver resultados antes de decidir.",
+      semanasPorFase: [1, 1, 2, 1, 1], precio: 9800, formacion: 4, equipo: 2,
+      incluye: ["web", "faq", "informe"] },
+    { id: "implantacion", nombre: "Implantación", lema: "El asistente en marcha en la web y el correo, conectado a tu CRM.",
+      semanasPorFase: [2, 2, 3, 2, 1], precio: 24500, formacion: 8, equipo: 3,
+      incluye: ["web", "correo", "faq", "base", "crm", "panel", "informe"] },
+    { id: "escala", nombre: "Escala", lema: "Todos los canales, el equipo entero formado y tres meses de soporte.",
+      semanasPorFase: [2, 3, 4, 3, 2], precio: 41000, formacion: 16, equipo: 4,
+      incluye: ["web", "correo", "whatsapp", "faq", "base", "crm", "panel", "informe", "soporte"] }
+  ],
+  extras: [
+    { id: "ingles", titulo: "Un segundo idioma: inglés", detalle: "El asistente contesta también en inglés. Alarga dos semanas la construcción.",
+      precio: 3200, semanas: { fase: 2, mas: 2 } },
+    { id: "supervisores", titulo: "Formación extra para supervisores", detalle: "Ocho horas más para quien revisa las respuestas y mejora la base de conocimiento.",
+      precio: 2400, formacion: 8, semanas: { fase: 4, mas: 1 } },
+    { id: "soporte", titulo: "Tres meses de soporte tras el arranque", detalle: "Revisamos cada semana las preguntas sin respuesta y ajustamos el asistente.",
+      precio: 3600, acompanamiento: 12, incluidoEn: ["escala"] }
+  ]
+};
+
+const eur = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+const fechaLarga = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "long", year: "numeric" });
+const diaSemana = new Intl.DateTimeFormat("es-ES", { weekday: "long" });
+const $ = (id) => document.getElementById(id);
+const aFecha = (texto) => { const [a, m, d] = texto.split("-").map(Number); return new Date(a, m - 1, d); };
+const masDias = (fecha, dias) => { const f = new Date(fecha); f.setDate(f.getDate() + dias); return f; };
+
+const estado = { plan: "implantacion", extras: new Set(), inicio: PROPUESTA.inicioPorDefecto };
+
+function calcular() {
+  const plan = PROPUESTA.planes.find((p) => p.id === estado.plan);
+  const semanas = [...plan.semanasPorFase];
+  let precio = plan.precio, formacion = plan.formacion, acompanamiento = 0;
+  const incluye = new Set(plan.incluye);
+  for (const extra of PROPUESTA.extras) {
+    if (!estado.extras.has(extra.id) || (extra.incluidoEn || []).includes(plan.id)) continue;
+    precio += extra.precio;
+    if (extra.semanas) semanas[extra.semanas.fase] += extra.semanas.mas;
+    if (extra.formacion) formacion += extra.formacion;
+    if (extra.acompanamiento) { acompanamiento = extra.acompanamiento; incluye.add("soporte"); }
+  }
+  if (incluye.has("soporte") && !acompanamiento) acompanamiento = 12;
+  const total = semanas.reduce((a, b) => a + b, 0);
+  const inicio = aFecha(estado.inicio);
+  const fin = masDias(inicio, total * 7 - 3);
+  return { plan, semanas, total, precio, formacion, incluye, acompanamiento, inicio, fin };
+}
+
+function pintarPlanes() {
+  $("planes").innerHTML = PROPUESTA.planes.map((p) => {
+    const total = p.semanasPorFase.reduce((a, b) => a + b, 0);
+    return `<label class="plan">
+      <input type="radio" name="plan" id="plan-${p.id}" value="${p.id}" ${p.id === estado.plan ? "checked" : ""}>
+      <span class="marca">Elegido</span>
+      <span class="nombre">${p.nombre}</span>
+      <span class="lema">${p.lema}</span>
+      <span class="cifras"><span>${total} semanas</span><span>${eur.format(p.precio)}</span></span>
+    </label>`;
+  }).join("");
+  $("planes").addEventListener("change", (e) => { estado.plan = e.target.value; pintar(); });
+}
+
+function pintarExtras() {
+  $("extras").innerHTML = PROPUESTA.extras.map((x) => `<label class="extra" id="fila-${x.id}">
+      <input type="checkbox" id="extra-${x.id}" value="${x.id}">
+      <span class="titulo-extra">${x.titulo}</span>
+      <span class="coste">+ ${eur.format(x.precio)}</span>
+      <span class="detalle">${x.detalle}</span>
+    </label>`).join("");
+  $("extras").addEventListener("change", (e) => {
+    if (e.target.checked) estado.extras.add(e.target.value); else estado.extras.delete(e.target.value);
+    pintar();
+  });
+}
+
+function pintar() {
+  const r = calcular();
+  for (const x of PROPUESTA.extras) {
+    const incluido = (x.incluidoEn || []).includes(r.plan.id);
+    const caja = $(`extra-${x.id}`), fila = $(`fila-${x.id}`);
+    caja.disabled = incluido;
+    caja.checked = incluido || estado.extras.has(x.id);
+    fila.classList.toggle("incluido", incluido);
+    fila.querySelector(".coste").textContent = incluido ? "Incluido" : `+ ${eur.format(x.precio)}`;
+  }
+  $("incluye").innerHTML = PROPUESTA.alcance.map((a) => {
+    const si = r.incluye.has(a.id);
+    return `<li class="${si ? "" : "no"}"><span class="icono" aria-hidden="true">${si ? "✓" : "–"}</span><span>${a.texto}<span class="paso" style="font-size:0"> ${si ? "incluido" : "no incluido"}</span></span></li>`;
+  }).join("");
+
+  const totalVista = r.total + (r.acompanamiento ? r.acompanamiento : 0);
+  let desde = 0;
+  const filas = PROPUESTA.fases.map((fase, i) => {
+    const izq = (desde / totalVista) * 100, ancho = (r.semanas[i] / totalVista) * 100;
+    desde += r.semanas[i];
+    return `<div class="fila"><span class="fase">${fase} <span class="paso">${r.semanas[i]} sem.</span></span>
+      <div class="pista"><div class="barra" style="left:${izq}%;width:${ancho}%"></div></div></div>`;
+  });
+  if (r.acompanamiento) {
+    const izq = (r.total / totalVista) * 100, ancho = (r.acompanamiento / totalVista) * 100;
+    filas.push(`<div class="fila"><span class="fase">Soporte <span class="paso">${r.acompanamiento} sem.</span></span>
+      <div class="pista"><div class="barra acomp" style="left:${izq}%;width:${ancho}%"></div></div></div>`);
+  }
+  const marcas = [0, Math.round(totalVista / 2), totalVista].map((s) => `<span>sem. ${s}</span>`).join("");
+  $("gantt").style.setProperty("--semanas", totalVista);
+  $("gantt").innerHTML = filas.join("") + `<div class="escala"><span></span><div class="marcas">${marcas}</div></div>`;
+  $("nota-cal").textContent = r.acompanamiento
+    ? `El proyecto dura ${r.total} semanas. El soporte va después de la puesta en marcha y no la retrasa.`
+    : `El proyecto dura ${r.total} semanas, de un lunes a un viernes.`;
+
+  $("r-plan").textContent = r.plan.nombre;
+  $("r-semanas").textContent = `${r.total} semanas`;
+  $("r-inicio").textContent = fechaLarga.format(r.inicio);
+  $("r-fin").textContent = fechaLarga.format(r.fin);
+  $("r-formacion").textContent = `${r.formacion} horas`;
+  $("r-equipo").textContent = `${r.plan.equipo} personas`;
+  $("r-precio").textContent = eur.format(r.precio);
+  $("dia-semana").textContent = diaSemana.format(r.inicio);
+  $("aceptado").hidden = true;
+}
+
+function iniciar() {
+  const hoy = aFecha(PROPUESTA.fecha);
+  $("fecha-propuesta").textContent = fechaLarga.format(hoy);
+  $("validez").textContent = `Válida hasta el ${fechaLarga.format(masDias(hoy, PROPUESTA.diasValidez))}`;
+  $("inicio").value = estado.inicio;
+  $("inicio").min = PROPUESTA.fecha;
+  $("inicio").addEventListener("change", (e) => { if (e.target.value) { estado.inicio = e.target.value; pintar(); } });
+  pintarPlanes();
+  pintarExtras();
+  $("aceptar").addEventListener("click", () => {
+    const r = calcular();
+    $("aceptado").textContent = `Has elegido el plan ${r.plan.nombre}, con arranque el ${fechaLarga.format(r.inicio)}. En una propuesta real, este botón enviaría tu aceptación; en este ejemplo no se guarda ni se envía nada.`;
+    $("aceptado").hidden = false;
+  });
+  pintar();
+}
+iniciar();
+</script>
+</body>
+</html>

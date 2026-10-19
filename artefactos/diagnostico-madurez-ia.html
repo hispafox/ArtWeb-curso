@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnóstico de madurez en IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;600;700&family=Martian+Mono:wght@400;600&display=swap">
+<style>
+/* Maqueta: el cuestionario en columna a la izquierda y el informe con el radar a la derecha; en móvil, el informe va primero */
+:root {
+  --fondo: #f3f2f9;
+  --hoja: #ffffff;
+  --tinta: #221f3a;
+  --tinta-suave: #5d5a78;
+  --esmeralda: #0f9a73;
+  --esmeralda-suave: #d9f2ea;
+  --violeta: #6a4ad9;
+  --linea: #dcdaea;
+  --f-titulo: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --f-texto: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-dato: "Martian Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #13121d; --hoja: #1c1a2a; --tinta: #ebe9f6; --tinta-suave: #aaa6c6;
+    --esmeralda: #3ccf9f; --esmeralda-suave: #123a2f; --violeta: #a38bff; --linea: #2f2c45;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #13121d; --hoja: #1c1a2a; --tinta: #ebe9f6; --tinta-suave: #aaa6c6;
+  --esmeralda: #3ccf9f; --esmeralda-suave: #123a2f; --violeta: #a38bff; --linea: #2f2c45;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--fondo); color: var(--tinta);
+  font-family: var(--f-texto); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 48px;
+}
+.marco { max-width: 1120px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 8px; max-width: 68ch; }
+.marca { font-family: var(--f-dato); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--violeta); }
+h1 { font-family: var(--f-titulo); font-weight: 400; font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1; margin: 0; text-wrap: balance; }
+h1 i { color: var(--esmeralda); }
+.entradilla { margin: 0; color: var(--tinta-suave); font-size: 1.05rem; }
+.aviso { font-size: .92rem; color: var(--tinta-suave); margin: 0; }
+.aviso button { font: inherit; color: var(--violeta); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+.cuerpo { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+form { display: grid; gap: 14px; min-width: 0; }
+.dimension { font-family: var(--f-dato); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--tinta-suave); margin: 10px 0 -4px; }
+fieldset { margin: 0; padding: 18px; border: 1px solid var(--linea); border-radius: 12px; background: var(--hoja); display: grid; gap: 10px; min-width: 0; }
+legend { padding: 0; font-weight: 700; font-size: 1.02rem; float: left; width: 100%; margin-bottom: 4px; }
+.opciones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; clear: both; }
+.opcion { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 12px; border: 1.5px solid var(--linea); border-radius: 9px; cursor: pointer; font-size: .94rem; }
+.opcion input { position: absolute; opacity: 0; pointer-events: none; }
+.opcion .punto { font-family: var(--f-dato); font-size: 11px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--linea); color: var(--tinta-suave); }
+.opcion:hover { border-color: var(--violeta); }
+.opcion:has(input:checked) { border-color: var(--esmeralda); background: var(--esmeralda-suave); }
+.opcion:has(input:checked) .punto { background: var(--esmeralda); border-color: var(--esmeralda); color: var(--hoja); }
+.opcion:has(input:focus-visible) { outline: 3px solid var(--violeta); outline-offset: 2px; }
+.informe { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: grid; gap: 16px; padding: 24px; border-radius: 14px; background: var(--hoja); border: 1px solid var(--linea); }
+.progreso { display: flex; justify-content: space-between; font-family: var(--f-dato); font-size: 12px; color: var(--tinta-suave); }
+.nivel { display: grid; gap: 4px; }
+.nivel .etiqueta { font-family: var(--f-dato); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--tinta-suave); }
+.nivel .nombre { font-family: var(--f-titulo); font-style: italic; font-size: 3rem; line-height: 1; color: var(--esmeralda); }
+.nivel p { margin: 0; }
+.escalera { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.escalera span { height: 8px; border-radius: 4px; background: var(--linea); }
+.escalera span.si { background: var(--esmeralda); }
+.radar { width: 100%; max-width: 360px; justify-self: center; }
+.radar text { font-family: var(--f-texto); font-size: 12px; fill: var(--tinta); }
+.radar .numero { font-family: var(--f-dato); font-size: 10px; fill: var(--tinta-suave); }
+.consejo { padding: 14px; border-radius: 10px; background: var(--esmeralda-suave); display: grid; gap: 4px; }
+.consejo strong { font-size: .95rem; }
+.enviar { font: inherit; font-weight: 700; padding: 12px 16px; border: 0; border-radius: 9px; background: var(--tinta); color: var(--fondo); cursor: pointer; }
+.enviar:focus-visible { outline: 3px solid var(--violeta); outline-offset: 2px; }
+.nota { margin: 0; font-size: .9rem; color: var(--tinta-suave); }
+footer { font-size: .85rem; color: var(--tinta-suave); border-top: 1px solid var(--linea); padding-top: 14px; }
+@media (max-width: 860px) {
+  .cuerpo { grid-template-columns: minmax(0, 1fr); }
+  .informe { position: static; order: -1; }
+}
+@media (max-width: 520px) { .opciones { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<div class="marco">
+  <header>
+    <span class="marca">Diagnóstico · 8 preguntas · 4 áreas</span>
+    <h1>¿En qué punto está tu empresa con la <i>inteligencia artificial</i>?</h1>
+    <p class="entradilla">Ocho preguntas sobre datos, personas, procesos y herramientas. Al momento tienes tu nivel, el área que más frena y por dónde empezar.</p>
+    <p class="aviso">Ahora ves unas respuestas de ejemplo. Cámbialas por las tuyas o <button type="button" id="limpiar">empieza en blanco</button>.</p>
+  </header>
+
+  <div class="cuerpo">
+    <form id="cuestionario" novalidate></form>
+
+    <aside class="informe" aria-live="polite">
+      <div class="progreso"><span id="contestadas"></span><span>Informe</span></div>
+      <div class="nivel">
+        <span class="etiqueta">Tu nivel</span>
+        <span class="nombre" id="nivel-nombre"></span>
+        <div class="escalera" id="escalera" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <p id="nivel-texto"></p>
+      </div>
+      <svg class="radar" id="radar" viewBox="0 0 360 330" role="img" aria-label="Puntuación por área"></svg>
+      <div class="consejo" id="consejo"></div>
+      <button type="button" class="enviar" id="enviar">Enviar mis respuestas</button>
+      <p class="nota" id="nota" hidden></p>
+    </aside>
+  </div>
+
+  <footer>Ejemplo del curso «Del artefacto a la web con Claude Code». Las preguntas y los niveles son de ejemplo, y en esta versión no se guarda nada.</footer>
+</div>
+
+<script>
+// Datos del diagnóstico: preguntas, niveles y consejos, aparte del diseño.
+const DIAGNOSTICO = {
+  areas: [
+    { id: "datos", nombre: "Datos", consejo: "Reúne en un solo sitio los documentos que más se consultan y pon a alguien al cargo de que estén al día." },
+    { id: "personas", nombre: "Personas", consejo: "Elige una persona de referencia y reserva una hora al mes para que el equipo comparta lo que le funciona." },
+    { id: "procesos", nombre: "Procesos", consejo: "Apunta cinco tareas que se repiten cada semana y mide cuánto tiempo se llevan hoy." },
+    { id: "herramientas", nombre: "Herramientas", consejo: "Pasa a una cuenta de empresa y deja escrito qué datos no se meten nunca en una IA." }
+  ],
+  preguntas: [
+    { id: "p1", area: "datos", texto: "¿Dónde están los datos con los que decide tu equipo?",
+      opciones: ["En la cabeza de cada uno y en correos", "En hojas de cálculo sueltas", "En un sistema común, aunque no siempre al día", "En un sistema común, limpio y con responsable"] },
+    { id: "p2", area: "datos", texto: "Si mañana conectaras una IA a los documentos de tu empresa, ¿estarían listos?",
+      opciones: ["No sabríamos por dónde empezar", "Habría que buscarlos y ordenarlos", "Casi todos están en un mismo sitio", "Sí, ordenados y con permisos claros"] },
+    { id: "p3", area: "personas", texto: "¿Cuánta gente del equipo usa la IA cada semana?",
+      opciones: ["Nadie o casi nadie", "Dos o tres personas curiosas", "Más o menos la mitad", "Casi todo el mundo"] },
+    { id: "p4", area: "personas", texto: "¿Hay alguien que enseñe y resuelva dudas?",
+      opciones: ["No", "Quien sabe ayuda cuando puede", "Hay una persona de referencia", "Hay formación y un canal para dudas"] },
+    { id: "p5", area: "procesos", texto: "¿Tienes localizadas tareas que la IA podría hacer o acelerar?",
+      opciones: ["Todavía no", "Hay ideas sueltas", "Hay una lista con prioridades", "Ya hay tareas medidas y en marcha"] },
+    { id: "p6", area: "procesos", texto: "Cuando la IA se equivoca, ¿quién lo revisa?",
+      opciones: ["Nadie lo ha pensado", "Quien la usa, si se da cuenta", "Se revisa lo importante", "Se revisa y se aprende de cada fallo"] },
+    { id: "p7", area: "herramientas", texto: "¿Qué herramientas de IA se usan en tu empresa?",
+      opciones: ["Las gratuitas, cada uno la suya", "Alguna de pago, sin acuerdo de empresa", "Una cuenta de empresa para parte del equipo", "Cuentas de empresa para todos, con administración"] },
+    { id: "p8", area: "herramientas", texto: "¿Hay normas sobre qué datos se pueden meter en una IA?",
+      opciones: ["No", "Se habla, pero no está escrito", "Hay unas normas escritas", "Hay normas, se conocen y se revisan"] }
+  ],
+  niveles: [
+    { hasta: 1.75, nombre: "Explorando", texto: "La IA entra por iniciativa de cada persona. Lo primero es poner un poco de orden antes de comprar nada." },
+    { hasta: 2.5, nombre: "Probando", texto: "Hay uso y ganas, pero cada uno a su manera. Toca elegir dos o tres tareas y hacerlas bien." },
+    { hasta: 3.25, nombre: "Integrando", texto: "La IA ya forma parte del trabajo de varias áreas. Ahora se trata de medirla y de cuidar los datos." },
+    { hasta: 4.01, nombre: "Transformando", texto: "La IA está en los procesos y tiene normas. El siguiente paso es llevarla a lo que ven tus clientes." }
+  ],
+  ejemplo: { p1: 2, p2: 2, p3: 3, p4: 2, p5: 1, p6: 2, p7: 2, p8: 1 }
+};
+
+const $ = (id) => document.getElementById(id);
+const respuestas = { ...DIAGNOSTICO.ejemplo };
+const dec = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+function pintarCuestionario() {
+  let html = "", areaActual = "";
+  for (const p of DIAGNOSTICO.preguntas) {
+    if (p.area !== areaActual) {
+      areaActual = p.area;
+      html += `<div class="dimension">${DIAGNOSTICO.areas.find((a) => a.id === p.area).nombre}</div>`;
+    }
+    html += `<fieldset><legend>${p.texto}</legend><div class="opciones">` +
+      p.opciones.map((o, i) => `<label class="opcion">
+        <input type="radio" name="${p.id}" id="${p.id}-${i + 1}" value="${i + 1}" ${respuestas[p.id] === i + 1 ? "checked" : ""}>
+        <span class="punto" aria-hidden="true">${i + 1}</span><span>${o}</span></label>`).join("") +
+      `</div></fieldset>`;
+  }
+  $("cuestionario").innerHTML = html;
+}
+
+function puntuar() {
+  const porArea = DIAGNOSTICO.areas.map((a) => {
+    const valores = DIAGNOSTICO.preguntas.filter((p) => p.area === a.id).map((p) => respuestas[p.id]).filter(Boolean);
+    return { ...a, valor: valores.length ? valores.reduce((x, y) => x + y, 0) / valores.length : 0, completa: valores.length === 2 };
+  });
+  const contestadas = Object.values(respuestas).filter(Boolean).length;
+  const conValor = porArea.filter((a) => a.valor > 0);
+  const media = conValor.length ? conValor.reduce((x, a) => x + a.valor, 0) / conValor.length : 0;
+  return { porArea, contestadas, media };
+}
+
+function radar(porArea) {
+  const cx = 180, cy = 160, r = 112, n = porArea.length;
+  const punto = (i, v) => {
+    const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+    return [cx + Math.cos(ang) * (r * v) / 4, cy + Math.sin(ang) * (r * v) / 4];
+  };
+  let s = "";
+  for (let anillo = 1; anillo <= 4; anillo++) {
+    const pts = porArea.map((_, i) => punto(i, anillo).join(",")).join(" ");
+    s += `<polygon points="${pts}" fill="none" stroke="var(--linea)" stroke-width="1"/>`;
+  }
+  porArea.forEach((_, i) => { const [x, y] = punto(i, 4); s += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--linea)"/>`; });
+  const forma = porArea.map((a, i) => punto(i, Math.max(a.valor, 0.15)).join(",")).join(" ");
+  s += `<polygon points="${forma}" fill="var(--esmeralda)" fill-opacity=".22" stroke="var(--esmeralda)" stroke-width="2.5" stroke-linejoin="round"/>`;
+  porArea.forEach((a, i) => {
+    const [x, y] = punto(i, Math.max(a.valor, 0.15));
+    s += `<circle cx="${x}" cy="${y}" r="4.5" fill="var(--esmeralda)"/>`;
+    const [lx, ly] = punto(i, 4.75);
+    const ancla = Math.abs(lx - cx) < 4 ? "middle" : lx > cx ? "start" : "end";
+    s += `<text x="${lx}" y="${ly + 4}" text-anchor="${ancla}">${a.nombre}</text>`;
+    s += `<text class="numero" x="${lx}" y="${ly + 18}" text-anchor="${ancla}">${a.valor ? dec.format(a.valor) : "—"} / 4</text>`;
+  });
+  $("radar").innerHTML = s;
+}
+
+function pintarInforme() {
+  const { porArea, contestadas, media } = puntuar();
+  const total = DIAGNOSTICO.preguntas.length;
+  $("contestadas").textContent = `${contestadas} de ${total} contestadas`;
+  const indice = media ? DIAGNOSTICO.niveles.findIndex((n) => media < n.hasta) : -1;
+  if (indice < 0) {
+    $("nivel-nombre").textContent = "Sin datos";
+    $("nivel-texto").textContent = "Contesta al menos una pregunta de cada área para ver tu nivel.";
+  } else {
+    const nivel = DIAGNOSTICO.niveles[indice];
+    $("nivel-nombre").textContent = nivel.nombre;
+    $("nivel-texto").textContent = `${nivel.texto} Media: ${dec.format(media)} sobre 4.`;
+  }
+  [...$("escalera").children].forEach((s, i) => s.classList.toggle("si", i <= indice));
+  radar(porArea);
+  const flojas = porArea.filter((a) => a.valor > 0).sort((x, y) => x.valor - y.valor);
+  $("consejo").innerHTML = flojas.length
+    ? `<strong>Por dónde empezar: ${flojas[0].nombre.toLowerCase()}</strong><span>${flojas[0].consejo}</span>`
+    : `<strong>Por dónde empezar</strong><span>Contesta las preguntas y aquí verás el área que más frena.</span>`;
+  $("enviar").disabled = contestadas < total;
+  $("enviar").textContent = contestadas < total ? `Faltan ${total - contestadas} respuestas` : "Enviar mis respuestas";
+  $("nota").hidden = true;
+}
+
+$("cuestionario").addEventListener("change", (e) => { respuestas[e.target.name] = Number(e.target.value); pintarInforme(); });
+$("limpiar").addEventListener("click", () => {
+  for (const k of Object.keys(respuestas)) delete respuestas[k];
+  pintarCuestionario(); pintarInforme();
+});
+$("enviar").addEventListener("click", () => {
+  $("nota").textContent = "Este ejemplo no guarda las respuestas. Para guardarlas y que tu equipo las vea en un panel hace falta un backend.";
+  $("nota").hidden = false;
+});
+pintarCuestionario();
+pintarInforme();
+</script>
+</body>
+</html>
