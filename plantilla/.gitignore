@@ -1,0 +1,30 @@
+# Claves y configuración local: nunca se suben
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Dependencias: se instalan en cada equipo
+node_modules/
+
+# Resultados de compilación: los genera la web al publicarse
+dist/
+build/
+
+# Enlaces locales con Vercel y Supabase
+.vercel/
+supabase/.temp/
+supabase/.branches/
+
+# Ajustes personales de Claude Code
+.claude/settings.local.json
+
+# Ficheros del sistema y del editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
