@@ -32,9 +32,9 @@ Si usas la estrategia de la rama de pruebas fija (módulo 3), en Vercel se le as
 
 ## La demostración: la propuesta de `web/`
 
-En el repositorio del curso hay varias webs en carpetas, así que el proyecto de Vercel se crea con `web` como carpeta raíz (Root Directory). En un repositorio propio del artefacto, como el tuyo, la carpeta raíz es la del repositorio y no hay que tocarla.
+El repositorio del curso tiene varias webs en carpetas, y su `main` solo trae los artefactos, sin `web/`. Por eso el proyecto de Vercel se crea con `web` como carpeta raíz (Root Directory) y con `modulo-5/vercel` como rama de producción, que es la rama donde está la web lista para publicar. En un repositorio propio del artefacto, como el tuyo, no hay que tocar ninguna de las dos: la carpeta raíz es la del repositorio y la rama de producción es `main`.
 
-> Crea en Vercel, en el equipo de la empresa, un proyecto enlazado a este repositorio de GitHub, con `web` como carpeta raíz, que publique la rama `main`. Antes de crearlo, dime qué vas a hacer y espera a que te diga que sí.
+> Crea en Vercel, en el equipo de la empresa, un proyecto enlazado a este repositorio de GitHub, con `web` como carpeta raíz y `modulo-5/vercel` como rama de producción. Antes de crearlo, dime qué vas a hacer y espera a que te diga que sí.
 
 ## Tu práctica
 
