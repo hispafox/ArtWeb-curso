@@ -38,44 +38,64 @@ El repositorio del curso tiene varias webs en carpetas, y su `main` solo trae lo
 
 ## Tu práctica
 
-Con la **calculadora de ahorro**, en tu repositorio `gestoria-calculadora-ahorro`, que ya tiene el proyecto web en `main` desde el módulo 4. En una sesión con esa carpeta, en modo Manual:
+**Una vez por empresa.** Quien administra las cuentas deja el equipo de Vercel en el plan Pro, con las personas que van a publicar, conectado a la organización de GitHub y con la protección de partida elegida para los proyectos nuevos. Si practicas con tu cuenta personal, úsala donde ponga «el equipo de la empresa». El recorrido es el mismo, con los límites del plan gratuito: un solo enlace para compartir, sin contraseña y con vuelta atrás solo a la publicación anterior.
 
-1. **El proyecto en Vercel:**
+Con la **calculadora de ahorro**, en tu repositorio `gestoria-calculadora-ahorro`, tal como la dejaste en el módulo 4.
 
-   > Crea en Vercel, en el equipo de la empresa, un proyecto enlazado a este repositorio, que publique la rama `main`. Antes de crearlo, dime qué vas a hacer y espera a que te diga que sí. Cuando termine, dame la dirección.
+1. **Abre una sesión nueva** con la carpeta del repositorio, en modo Manual. Lo que se publica es `main`, y la conversión del módulo 4 podía haberse quedado en una rama con su pull request abierta. Si sigue abierta, llévala primero a `main`:
 
-   Si Claude te dice que Vercel no tiene acceso al repositorio, falta conectar GitHub con Vercel: pídele que te diga dónde se hace.
+   > Acepta la pull request de la conversión a proyecto, borra su rama y vuelve a `main` con lo último.
 
-2. **Ábrela.** En el ordenador y en el móvil. Mueve los mandos: tiene que funcionar igual que en tu equipo.
+2. **Crea el proyecto enlazado:**
 
-3. **La mejora, en su vista previa.** Resuelve el issue que apuntaste en el módulo 3:
+   > Crea en Vercel, en el equipo de la empresa, un proyecto para esta web enlazado a este repositorio. Antes de crear nada, explícame qué vas a hacer y espera a que te diga que sí.
+
+   Abre la dirección de producción que te dé, en el ordenador y en el móvil, y mueve los mandos: tiene que funcionar igual que en tu equipo. Si Claude te dice que Vercel no tiene acceso al repositorio, falta darle permiso en GitHub: pídele que te diga dónde se hace.
+
+3. **Mira quién la abre:**
+
+   > ¿Qué protección tiene el proyecto? Dime quién puede abrir la dirección de producción y quién las vistas previas.
+
+   Para practicar, deja las vistas previas con Standard Protection.
+
+4. **Resuelve el issue del número de versión.** En el módulo 3 apuntaste la tarea de añadir al pie de la calculadora el número de versión, y quedó para aquí:
 
    > Resuelve el issue de la versión al pie en una rama y abre la pull request, que diga que cierra ese issue. Dame la dirección de la vista previa de esa rama.
 
-   Abre la vista previa y comprueba que la versión aparece al pie. Abre también la dirección de producción: ahí todavía no está.
+   Si no llegaste a apuntar el issue, pídelo igual: «Añade al pie de la calculadora el número de versión. Hazlo en una rama, súbela y abre una pull request».
 
-4. **Publícala.** Acepta la pull request y espera un momento:
+   En la pull request aparecerá el comentario de Vercel con el enlace de la vista previa. Ábrelo y compáralo con producción: en la vista previa está el número y en producción todavía no. Ábrelo también en una ventana privada del navegador, donde te tiene que pedir que inicies sesión en Vercel.
 
-   > ¿Se ha publicado ya en producción? Dame la dirección.
+5. **Acéptala:**
 
-   La versión al pie tiene que aparecer ahora en la dirección de siempre.
+   > Acepta la pull request, borra la rama y vuelve a `main` con lo último. Comprueba que el issue se ha cerrado.
 
-5. **Decide quién puede abrirla:**
+   Al cabo de un momento, la dirección de producción enseña el número de versión, y es la misma del paso 2.
 
-   > ¿Quién puede abrir ahora esta web? Explícame qué opciones tengo para que solo la vea el cliente y qué cuesta cada una en nuestro plan.
+   Si quieres ver cómo entraría un cliente sin cuenta, antes de aceptarla crea un enlace para compartir desde Share en la página de la vista previa, ábrelo en la ventana privada y retíralo después con «Only people with access». En Hobby solo hay un enlace para toda la cuenta.
 
-6. **Si algo sale mal** (no hace falta provocarlo):
+6. **Prepara la vuelta atrás.** No hace falta romper nada para aprenderla:
 
    > Si la última publicación hubiera salido mal, ¿cómo volveríamos a la anterior? Explícamelo paso a paso, sin hacerlo.
 
-Si tu empresa tiene un dominio, pídele a Claude que te guíe para ponérselo, con los pasos del proveedor del dominio.
+   Y si quieres verla con tus ojos, la calculadora es el sitio. En el panel de Vercel, en la página del proyecto, vuelve a la publicación anterior con el botón de volver atrás: producción se queda sin el número. Después pulsa **Undo Rollback**, elige la publicación nueva, y el número vuelve. Con una calculadora de prueba no pasa nada si algo sale mal.
+
+Otras cosas que puedes pedirle:
+
+> ¿Cuál es la dirección de producción de este proyecto, y cuál la de la última vista previa?
+
+> Enséñame las últimas publicaciones del proyecto y dime cuál está en producción.
+
+> ¿Qué registros DNS tendría que crear para publicarla en `calculadora.tuempresa.com`? No cambies nada todavía.
 
 ## Qué debe salir y cómo sabes que está bien
 
-- [ ] El proyecto está en Vercel, **en el equipo de la empresa**, y **enlazado a tu repositorio** de GitHub.
-- [ ] La web se abre en una **dirección estable** y funciona igual que en tu equipo.
-- [ ] La rama de la mejora tuvo su **vista previa**, con la versión al pie, mientras producción seguía sin ella.
-- [ ] Al aceptar la pull request, **producción se actualizó sola**, en la misma dirección.
+- [ ] En Vercel, en el equipo de la empresa o en tu cuenta, hay un proyecto **enlazado a `gestoria-calculadora-ahorro`**.
+- [ ] La **dirección de producción** se abre en el ordenador y en el móvil, y la calculadora funciona igual que en tu equipo.
+- [ ] La pull request del número de versión tiene el **comentario de Vercel con su vista previa**, y en ella se ve el número.
+- [ ] Esa vista previa, abierta en una ventana privada, **pide iniciar sesión** en Vercel.
+- [ ] Tras aceptar la pull request, producción **enseña el número en la misma dirección** que antes.
 - [ ] Al aceptar la pull request, el **issue** de la versión al pie se ha cerrado solo.
-- [ ] Sabes quién puede abrir la web ahora y qué harías para que solo la viera el cliente.
-- [ ] Sabes cómo se vuelve a la publicación anterior y por qué después hay que pulsar «Undo Rollback».
+- [ ] Sabes cómo se vuelve a la publicación anterior y **por qué después hay que pulsar Undo Rollback**.
+
+Si algo de esto no se cumple, no se da por bueno: se le dice a Claude qué falta y lo rehace, como en el módulo 2.
