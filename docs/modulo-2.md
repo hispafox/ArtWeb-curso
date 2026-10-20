@@ -8,6 +8,8 @@ Lo de la rama `modulo-1/el-camino` más este documento.
 
 ## Antes de empezar: lo que se instala una vez
 
+El paso a paso, en Windows y en Mac, está en [`docs/instalacion.md`](instalacion.md), con Visual Studio Code como opción. Aquí va el resumen.
+
 | Qué | Para qué | Cómo se comprueba |
 |---|---|---|
 | La aplicación de escritorio de Claude | Trae Claude Code en su pestaña **Code**. Necesita un plan Pro, Max, Team o Enterprise: el gratuito no incluye Claude Code | Abres la app y ves la pestaña Code |
