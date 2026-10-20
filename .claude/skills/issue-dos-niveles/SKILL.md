@@ -50,6 +50,6 @@ Título: empieza por un verbo y dice el resultado, en castellano, en menos de 70
 
 ## Al resolver un issue
 
-- Trabaja en una rama con su número, por ejemplo `issue-12-version-al-pie`. Nunca en `main`.
+- Trabaja en una rama con el prefijo y el tema, como cualquier cambio: por ejemplo `mejora/version-al-pie`. Nunca en `main`.
 - En la descripción de la pull request escribe `Closes #12`, para que el issue se cierre solo cuando se acepte.
 - Al terminar, marca en el issue las casillas de «Cómo sabremos que está hecho» que hayas comprobado y di cuáles quedan para que las mire una persona.
