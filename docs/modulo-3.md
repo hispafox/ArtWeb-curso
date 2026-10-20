@@ -61,6 +61,12 @@ Esto lo hace quien administra la organización de GitHub de la empresa. Si pract
 
 Con la **calculadora de ahorro**, la misma que cambiaste en el módulo 2.
 
+Para ponerte en esta rama, abre una sesión con la carpeta `ArtWeb-curso` y pídeselo como en el módulo 2:
+
+> Cámbiate a la rama `modulo-3/github` y dime qué ha cambiado respecto a la anterior.
+
+Las ramas del repositorio del curso no siguen la norma de borrarlas: hay una por módulo y se quedan, porque cada una guarda lo de su módulo. La norma vale para las ramas de tus repositorios.
+
 1. **Crea su repositorio desde la plantilla.** Desde la sesión de `ArtWeb-curso`:
 
    > Crea un repositorio privado nuevo llamado `gestoria-calculadora-ahorro` a partir de la plantilla `nombre-de-tu-organización/plantilla-empresa` y descárgalo en `Documentos/curso`, al lado de `ArtWeb-curso`.
@@ -69,9 +75,9 @@ Con la **calculadora de ahorro**, la misma que cambiaste en el módulo 2.
 
 3. **Comprueba el hook.** Estás en `main`, así que esto tiene que fallar:
 
-   > Copia aquí la calculadora de `../ArtWeb-curso/artefactos/calculadora-ahorro.html` y guarda la versión.
+   > Copia aquí la calculadora de `../ArtWeb-curso/artefactos/calculadora-ahorro.html` y guarda la versión en `main`. Es una prueba: quiero ver que el hook te frena.
 
-   Claude copiará el fichero, pero al intentar guardar la versión el hook lo frenará. Lo correcto es que te diga que en `main` no puede y te proponga una rama.
+   Claude copiará el fichero, intentará guardar la versión y el hook lo frenará. Lo correcto es que te enseñe el mensaje del hook, el de «Bloqueado por la norma del equipo», y te proponga una rama. Si se niega sin intentarlo, porque ya se lo dice el `CLAUDE.md`, la prueba no ha llegado al hook: pídele que lo intente.
 
 4. **Hazlo en una rama, súbela y abre la pull request:**
 
@@ -105,14 +111,14 @@ Otras cosas que puedes pedirle en tu repositorio:
 
 - [ ] En GitHub está `plantilla-empresa`, **privado y marcado como plantilla**.
 - [ ] Está tu repositorio `gestoria-calculadora-ahorro`, **privado**, con `CLAUDE.md`, `README.md`, `.gitignore` y la carpeta `.claude`.
-- [ ] Al pedirle a Claude que guardara la versión en `main`, **se negó y te explicó por qué**.
+- [ ] Al intentar guardar la versión en `main`, **el hook lo frenó** y Claude te enseñó su mensaje.
 - [ ] La **pull request** de `contenido/calculadora` traía la calculadora, y al aceptarla la calculadora quedó en `main`.
 - [ ] El **issue** tiene dos partes: «Para el equipo», sin jerga, y «Detalle técnico».
 - [ ] Si le pides «Pasa las pruebas del hook que protege main», salen todas en verde.
 
 ## Lo que el hook no frena
 
-El hook frena a Claude, no a las personas. Quien edita un fichero a mano en la web de GitHub, o usa Git fuera de Claude, puede escribir en `main`. Para eso GitHub tiene sus propias reglas de protección de ramas, pero en los repositorios privados piden un plan de pago (Team o Enterprise).
+El hook vigila lo que hace Claude, no a las personas. Quien edita un fichero a mano en la web de GitHub, o usa Git por su cuenta fuera de Claude, puede escribir en `main`. Ahí lo que protege es el acuerdo del equipo, el mismo que dice la norma 1 del `CLAUDE.md` de la plantilla.
 
 ## Las skills de la empresa
 
