@@ -39,6 +39,8 @@ Cada rama trae lo de la anterior más lo de su módulo, y en `docs/modulo-<n>.md
 
 ## Cómo empezar
 
+Antes, instala lo que necesita tu equipo, una sola vez: está todo en [`docs/instalacion.md`](docs/instalacion.md).
+
 1. Crea en tu equipo una carpeta para el curso, por ejemplo `Documentos/curso`.
 2. Abre la aplicación de escritorio de Claude, ve a la pestaña **Code**, abre una sesión nueva y elige esa carpeta.
 3. Pídeselo así:
@@ -65,4 +67,4 @@ Para traer las novedades del repositorio, si se ha actualizado después de que l
 
 ## Lo que necesita tu equipo
 
-La aplicación de escritorio de Claude con un plan que incluya Claude Code, Git y Node.js. Qué es cada cosa y cómo se comprueba que funciona está en el módulo 2.
+La aplicación de escritorio de Claude con un plan que incluya Claude Code, Git, Node.js y la CLI de GitHub; Visual Studio Code, si quieres; y las cuentas de GitHub, Vercel y Supabase. Cómo se instala cada cosa, en Windows y en Mac, y cómo se comprueba que funciona está en [`docs/instalacion.md`](docs/instalacion.md). Hazlo antes de la primera sesión.
